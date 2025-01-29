@@ -1,0 +1,164 @@
+PAGINA CADASTRO DE PEDIDO:
+Em uma pizzaria, podemos ter dois sabores de pizza em uma unica pizza, mas tem algumas que permitem ate 4 sabores;
+criar regra para mostrar a quantia de sabores permitidos, e mostrar essa quantidade em numeros de input;
+se nao for adicionado um segundo sabor em caso de pizzas, o sistema entende que é uma pizza completa.
+Se quantidade de pedidos for maior que capacidade das bags, cadastrar outro pedido e linkar esses dois pedidos para serem entregues juntos.
+campo de obs.
+Ter todas os itens do que sao vendidos armazenados no banco de dados;
+
+EXEMPLO DE USO:
+INPUT:
+nome do cliente;
+
+INPUT:
+toscana;
+frango com queijo;
+inputs obs:
+	remover algum iten, adicionar algum, etc...
+
+INPUT 2
+mussarela;
+brocolis;
+inputs obs:
+	remover algum iten, adicionar algum, etc...
+[Botao: Adicionar Mais um iten?]
+
+[adicionar mais um pedido] // botao aparece quando o numero de itens em um pedido é superior a capacidade de apenas um motoqueiro fazer a entrega
+
+Se entrega:
+Endereco: nelson ribeiro, 230; // endereço buscado apenas na região de entrega.
+
+acompanhamento?[x]
+coca dois litros;
+fanta uva lata 300;
+fanta laranja;
+[Botao: Adicionar Mais um iten?]
+
+[adicionar mais um pedido] // botao aparece quando o numero de itens em um pedido é superior a capacidade de apenas um motoqueiro fazer a entrega
+
+Consultar Valor
+____________________
+Tempo Aproximado para entrega se entrega: 1:20min //considerar quantidade itens, quantidade de pedidos prontos, em andamento, em rota.
+Valor aproximado para retiradaa se retirada: 30min //considerar quantidade itens, considerar quantidade de pedidos em andamento.
+
+valor para retirada se retirada: valor - taxa;
+Valor para entregar se entrega: valor + taxa
+____________________
+
+CANCELAR CADASTRO DO PEDIDO[] -> zera os campos
+ADICIONAR MAIS ITENS[] // caso apos a verificação do valor o cliente queira adicionar algo no pedido
+
+Forma de pagamento:
+Pix[] Cartao[] Dinhero[]
+Se dinhero Perguntar Troco?
+Valor - Pedido = troco;
+Se pix
+Pagamento Realizado? []
+
+CONFIRMAR PEDIDO -> Cadastra Pedido No Banco -> com a hora atual, Tempo de espera, valor, pedido(itens, acompanhamentos),
+forma de pagamento, Valor do pedido, se dinheiro Valor do cliente, Troco(se for dinheiro), e a flag: em preparo, se pix pagamento confirmado?.
+PedidoAgrupado, Se PedidoAgrupado NumeroPedido,
++++++++++++++++++++++++++++=
+SISTEMA
+Cadastra Pedidos;
+Gera a Comanda com essas informações;
+Imprime comanda;
++++++++++++++++++++++++++++
+PAGINA DE PEDIDOS:
+	mostra todos os pedidos.
+	CAMPO DE PESQUISA DE PEDIDO -> Pesquisa de pedidos Por endereço -> RETORNA O(S) PEDIDO 
+	Filtros por flags;
+	FLAGS são:
+		em andamento (sendo preparado), em rota de entrega, Prontos Aguardando o motoboy, Entregue. cancelado.
+	Todos os pedidos começam COM A flag, em preparo.
+	Pedidos são listados por ordem de tempo, O primeiro a ser pedido esta no topo da lista.
+	Pedidos Possuem Botoes de: CANCELAR PEDIDO, CONFIRMAR ENTREGA, EM ROTA, PRONTO, CONSULTAR PEDIDO, EDITAR PEDIDO, se pagamento = pix -> CONFIRMAR PAGAMENTO;
+	Pedidos com ENTREGA CONFIRMADA, São removidos da lista de pedidos, e armazenados em uma colunas pedidos finalizados: informações do pedido.
+	Pedidos podem ser: DELETADOS, EDITADOS, LIDOS, INSERIDOS no banco;
+	
+Botao Cancelar pedidos:
+	Remove o pedido da lista de pedidos, Adiciona a flag cancelado ao pedido, Adiciona na tabela de Pedidos finalizados.
+	
+Botao Confirmar entrega:
+	é removido da lista de pedidos, Adiciona a flag Entregue, e armazenados em uma colunas pedidos finalizados: informações do pedido.
+
+Botao Em rota:
+	Adiciona a flag em rota, mantem o pedido na lista de pedidos.
+
+Botao Pronto:
+	Adiciona a flag pronto, Mantem na lista de Pedidos.
+
+BOTAO CRIAR ROTA:
+	motoboyNome[] motoboyNome[] motoboyNome[] motoboyNome[x]
+	
+	para cada busca confirma se a bag do motoboy cabe o pedido.
+		Enquanto !bag.cheia:
+		Busca 1 pedido Pronto.
+		se Pedido.itens maior que bag.capacidade;
+		se Pedido.itens +  bag.itens MAIOR que bag.capacidade //bag.itens = quantidade de itens na bag; 
+		se Pedido.acompanhamento > Bag.lateral //bag.lateral quantidade bolsas
+		se Pedido.acompanhamento + bag.lateral.item MAIOR que bag.lateral //
+		Se falso adiciona pedido a rota;
+		Se verdadeiro INFORMAR QUE O PEDIDO NAO CABE NA BAG: mostrar itens e acompanhamento do pedido. 
+			PERGUNTAR: Adicionar Mesmo Assim[]
+			buscar proximo pedido pronto[]
+	Bag.cheia
+		Perguntar: Bag cheia.
+			adicionar mais itens[] iniciar Entrega[]
+		calcula a melhor rota com os pedidos que foram adicionados a bag
+.
+Consultar Pedido:
+	Retorna as informações detalhadas do pedido.
+
+Editar pedido: -> Pedidos editados são recolocados no final da fila, pedidos só podem ser editados se flag = Em preparo OU PRONT;
+	Reimprimir Comando Com Uma menssagem Enorme: ++++++ATENÇAO!! PEDIDO EDITADO, DISCARTE A COMANDA ANTERIOR REFERENTE A ESSE PEDIDO E USE ESSA NOVA+++++
+	abre uma aba de edição PODENDO APENAS ADICIONAR ITENS, MUDAR ENDEREÇO DE ENTREGA, ADICIONAR ACOMPANHAMENTOS,
+Editar itens:
+Inputs INFORMATIVOS:
+INPUT:
+toscana;
+frango com queijo;
+inputs obs:
+        remover algum iten, adicionar algum, etc...
+INPUT 2
+mussarela;
+brocolis;
+inputs obs:
+        remover algum iten, adicionar algum, etc...
+[Adicionar Mais Um iten]
+
+nelson ribeiro, 230; // endereço buscado apenas na região de entrega
+[Alterar Endereço De Entrega]
+
+acompanhamento:
+coca dois litros;
+[REMOVER]
+fanta uva lata 300;
+[REMOVER]
+fanta laranja;
+[REMOVER]
+[ADICIONAR MAIS ITENS]
+
+TRAZ AS INFORMAÇÕES DE PAGAMENTO DO PEDIDO,
+ESSA SEESÃO ABAIXO JA DEVE ESTAR PREENCHIDA.
+Forma de pagamento:
+Pix[] Cartao[] Dinhero[x]
+Se dinhero Perguntar Troco[]
+Valor - Pedido = troco;
+Se PIX CONFIRMAR PAGAMENTO[]
+
+[CONSULTAR NOVO VALOR]
+[CONFIRMAR ALTERAÇÔES NO PEDIDO]
+Novo:
+____________________
+Tempo Aproximado: 1:50min
+Valor: 120,00r$
+____________________
+[Continuar editando]
+[Descartar mudanças] //Pedido volta ao seu estado original nada é adicionado no banco ou impresso.
+
+BOTAO CONFIRMAR PAGAMENTO
+	para pedidos onde a forma de pagamento é feita em pix mas ainda nao havia sido pago.
+
+Paginas:
+pedidos, editar pedido, criar pedido, criar rota, pedidos finalizados, pedidos atrasados, pedidos agrupados.
