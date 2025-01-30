@@ -1,8 +1,12 @@
 <h1>Gerenciador de Pedidos para uma pizzaria</h1>
-
+<h3>
+<p>Eu mesmo levantei os requitos, as regras de negócio e a modelagem dos dados, com o levantamento das funcionalidades que fiz
+é possivel ver esse arquivo (nada bonito) em: "ComoDeveFuncionar.txt"
+</p>
+</h3>
 <h2>Requisitos funcionais:</h2>
 <ul>
-    <li>Cadstrar usuario admin</li>
+    <li>Cadastrar usuario admin</li>
     <li>Cadastrar produtos no sistema (pizzas e acompanhamento)</li>
     <li>Criar um pedido</li>
     <li>Cancelar a criação de um pedido (caso cliente desista da compra durante o cadastro do pedido)</li>
@@ -26,12 +30,14 @@
 
 <h2>Regras de negócio</h2>
 <ul>
+    <li>produtos cadastrados devem possuir, valor, nome, tipo.</li>
+    <li>acompanhamentos podem ser n coisas</li>
     <li>Todo pedido produto cadastrado no sistema deve ter um identificador unico</li>
     <li>Criar regra de limite de sabores para uma unica pizza</li>
     <li>todo pedido, deve ter:
         <ol>
             <li>nome do cliente</li>
-            <li>Idetificador do pedido</li>
+            <li>idetificador do pedido</li>
             <li>produtos pedidos</li>
             <li>valor total</li>
             <li>Tempo de espera</li>
@@ -97,6 +103,7 @@
         calcular rota
         <ol>
             <li>opções de checkbox devem ser mostrada com os nomes do motoboys</li>
+            <li>Motoqueiros em rota nao podera ser adicionado pedidos</li>
             <li>Sera realizado uma busca por pedidos o a flag "PRONTO"</li>
             <li>para cada busca confirma se a bag do motoboy cabe o pedido.</li>
             <li>sempre que o pedido nao couber em um motoqueiro, informar ao usuario, onde sera exibido duas opções: "adicionar mesmo assim" e "ir para a proxima"
@@ -116,11 +123,32 @@
             <li>se calcular rota -> pega todos os pedidos adicionados a bag do motoqueiro, e pelo endereço ou tempo de espera calcular qual deve ser entregue
             primeiro, retorna um lista com os pedidos em ordem de entrega, com os identificadores.
             </li>
+            <li>todos os pedidos que foram adicionados a bag de um motoqueiro devem ter a flag para "Em rota"</li>
         </ol>
     </li>
     <li>se confirmação do pagamento em pix, for feita após a impressão da comanda, sera necessario informar adicionar manualmente esse informação a comanda</li>
     <li>Pedidos prontons, recebm a flag pronto</li>
     <li>todo motoboy, possui uma bag</li>
+</ul>
+
+<h2>Modelagem de dados</h2>
+<ul>
+    <li><h4>Entidades</h4></li>
+    <li>Cliente</li>
+    <li>Motoboy</li>
+    <li>Rota</li>
+    <li>Bag</li>
+    <li>Item</li>
+    <li>Produtos</li>
+    <li>Pizza</li>
+    <li>Refrigerante</li>
+    <li>Trufa</li>
+    <li>
+        <h4>Modelo Conceitual e Relacionamentos</h4>
+    </li>
+    <li>
+        <img src="DER/Conceitual.png" />
+    </li>
 </ul>
 
 voce pode ver mais em:
