@@ -130,6 +130,10 @@
     <li>
         <img src="DER/Conceitual.png" />
     </li>
+        <li><h4>DER Lógico</h4></li>
+    <li>
+        <img src="DER/Logico.png" />
+    </li>
 </ul>
 
 Você pode ver mais em: ComoDeveFuncionar.txt
