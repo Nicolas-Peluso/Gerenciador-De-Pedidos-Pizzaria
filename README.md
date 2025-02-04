@@ -104,10 +104,8 @@
             <li>Opções de checkbox devem ser mostradas com os nomes dos motoboys</li>
             <li>Motoqueiros em rota não poderão receber novos pedidos</li>
             <li>Será realizada uma busca por pedidos com a flag "PRONTO"</li>
-            <li>Para cada busca, confirma-se se a bag do motoboy cabe o pedido.</li>
-            <li>Se a bag do motoboy estiver cheia, informar: "Bag cheia" e oferecer opções: "Adicionar mais pedidos a esse motoboy" ou "Calcular Rota"</li>
-            <li>Se calcular rota -> ordenar pedidos na bag do motoboy por endereço ou tempo de espera</li>
-            <li>Todos os pedidos na bag de um motoboy devem ter a flag "Em rota"</li>
+            <li>ordenar pedidos com o motoboy por endereço ou tempo de espera</li>
+            <li>Todos os pedidos com um motoboy devem ter a flag "Em rota"</li>
         </ol>
     </li>
 </ul>
@@ -123,14 +121,13 @@
     <li>Produtos</li>
     <li>Pizza</li>
     <li>Refrigerante</li>
-    <li>Trufa</li>
     <li>
         <h4>Modelo Conceitual e Relacionamentos</h4>
     </li>
     <li>
         <img src="DER/Conceitual.png" />
     </li>
-        <li><h4>DER Lógico</h4></li>
+        <li><h4>Modelo Lógico Relacionamentos e atributos</h4></li>
     <li>
         <img src="DER/Logico.png" />
     </li>
