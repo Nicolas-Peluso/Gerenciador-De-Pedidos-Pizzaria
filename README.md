@@ -2,6 +2,8 @@
 <h3>
 <p>Eu mesmo levantei os requisitos, as regras de negócio e a modelagem dos dados, com o levantamento das funcionalidades que fiz
 é possível ver esse arquivo (nada bonito) em: "ComoDeveFuncionar.txt"</p>
+<p>Esse projeto na pasta "FontEnd" é possivel ver o design das paginas em andamento, design foi feito no figma</p>
+<p>Estou usando alguns icones do https://www.flaticon.com/br, e imagens do https://unsplash.com/pt-br/@pablopacheco_videografo</p>
 </h3>
 <h2>Requisitos funcionais:</h2>
 <ul>
@@ -30,7 +32,7 @@
 <h2>Regras de negócio</h2>
 <ul>
     <li>Produtos cadastrados devem possuir valor, nome e tipo.</li>
-    <li>Acompanhamentos podem ser de n tipo</li>
+    <li>Acompanhamentos devem ser do tipo acompanhamento</li>
     <li>Pizzas devem ser do tipo Pizza</li>
     <li>Todo produto cadastrado no sistema deve ter um identificador único</li>
     <li>Criar regra de limite de sabores para uma única pizza</li>
