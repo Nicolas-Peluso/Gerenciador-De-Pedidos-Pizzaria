@@ -77,10 +77,10 @@ PAGINA DE PEDIDOS:
 	Pedidos podem ser: DELETADOS, EDITADOS, LIDOS, INSERIDOS no banco;
 	
 Botao Cancelar pedidos:
-	Remove o pedido da lista de pedidos, Adiciona a flag cancelado ao pedido, Adiciona na tabela de Pedidos finalizados.
+	Remove o pedido da lista de pedidos, Adiciona a flag cancelado ao pedido.
 	
 Botao Confirmar entrega:
-	é removido da lista de pedidos, Adiciona a flag Entregue, e armazenados em uma colunas pedidos finalizados: informações do pedido.
+	é removido da lista de pedidos, Adiciona a flag Entregue.
 
 Botao Em rota:
 	Adiciona a flag em rota, mantem o pedido na lista de pedidos.
@@ -91,22 +91,6 @@ Botao Pronto:
 BOTAO CRIAR ROTA:
 	motoboyNome[] motoboyNome[] motoboyNome[] motoboyNome[x]
 	
-	para cada busca confirma se a bag do motoboy cabe o pedido.
-		Enquanto !bag.cheia:
-		Busca 1 pedido Pronto.
-		se Pedido.itens maior que bag.capacidade;
-		se Pedido.itens +  bag.itens MAIOR que bag.capacidade //bag.itens = quantidade de itens na bag; 
-		se Pedido.acompanhamento > Bag.lateral //bag.lateral quantidade bolsas
-		se Pedido.acompanhamento + bag.lateral.item MAIOR que bag.lateral //
-		Se falso adiciona pedido a rota;
-		Se verdadeiro INFORMAR QUE O PEDIDO NAO CABE NA BAG: mostrar itens e acompanhamento do pedido. 
-			PERGUNTAR: Adicionar Mesmo Assim[]
-			buscar proximo pedido pronto[]
-	Bag.cheia
-		Perguntar: Bag cheia.
-			adicionar mais itens[] iniciar Entrega[]
-		calcula a melhor rota com os pedidos que foram adicionados a bag
-.
 Consultar Pedido:
 	Retorna as informações detalhadas do pedido.
 

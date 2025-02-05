@@ -5,7 +5,7 @@
 </h3>
 <h2>Requisitos funcionais:</h2>
 <ul>
-    <li>Cadastrar usuário admin</li>
+    <li>Cadastrar usuário admin (somente um usuario admin no sistema)</li>
     <li>Cadastrar produtos no sistema (pizzas e acompanhamento)</li>
     <li>Criar um pedido</li>
     <li>Cancelar a criação de um pedido (caso cliente desista da compra durante o cadastro do pedido)</li>
@@ -22,7 +22,7 @@
     <li>Listar pedidos de acordo com um filtro (flags)</li>
     <li>Se pagamento = pix -> Confirmar pagamento do pedido</li>
     <li>Informar que o pedido está pronto (Aguardando motoboy)</li>
-    <li>Criar uma rota de acordo com os pedidos que estão com um motoboy</li>
+    <li>Criar uma rota de acordo com os pedidos que estão com um motoboy</li> 
     <li>Cadastrar um motoboy</li>
     <li>Finalizar pedido</li>
 </ul>
@@ -30,7 +30,8 @@
 <h2>Regras de negócio</h2>
 <ul>
     <li>Produtos cadastrados devem possuir valor, nome e tipo.</li>
-    <li>Acompanhamentos podem ser n coisas</li>
+    <li>Acompanhamentos podem ser de n tipo</li>
+    <li>Pizzas devem ser do tipo Pizza</li>
     <li>Todo produto cadastrado no sistema deve ter um identificador único</li>
     <li>Criar regra de limite de sabores para uma única pizza</li>
     <li>Todo pedido deve ter:
