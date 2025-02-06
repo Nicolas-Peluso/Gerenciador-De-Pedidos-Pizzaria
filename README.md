@@ -135,5 +135,17 @@
         <img src="DER/Logico.png" />
     </li>
 </ul>
+<h2>Ferramentas utilizadas</h2>
+<ul>
+    <li>
+        reactjs, html5, cssModules, javascript.
+    </li>
+    <li>
+        java, HttpServer, HttpHandle, Gson(goole), Gerenciador de dependencias: maven; JDBC.
+    </li>
+    <li>
+        MySql, sql.
+    </li>
+</ul>
 
 Você pode ver mais em: ComoDeveFuncionar.txt
