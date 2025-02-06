@@ -28,7 +28,10 @@ CREATE TABLE `Acompanhamento` (
   `preco` float NOT NULL,
   `obs` varchar(1000) NOT NULL,
   `idAcom` int NOT NULL AUTO_INCREMENT,
-  PRIMARY KEY (`idAcom`)
+  `IdUsuario` int NOT NULL,
+  PRIMARY KEY (`idAcom`),
+  KEY `IdUsuario` (`IdUsuario`),
+  CONSTRAINT `Acompanhamento_ibfk_1` FOREIGN KEY (`IdUsuario`) REFERENCES `usuario` (`IdUsuario`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -82,16 +85,13 @@ CREATE TABLE `item` (
   `idPizza` int DEFAULT NULL,
   `idAcom` int DEFAULT NULL,
   `idPedido` int NOT NULL,
-  `idUsuario` int NOT NULL,
   PRIMARY KEY (`idItem`),
   KEY `idPizza` (`idPizza`),
   KEY `idAcom` (`idAcom`),
   KEY `idPedido` (`idPedido`),
-  KEY `idUsuario` (`idUsuario`),
   CONSTRAINT `item_ibfk_1` FOREIGN KEY (`idPizza`) REFERENCES `pizza` (`IdPizza`) ON DELETE SET NULL,
   CONSTRAINT `item_ibfk_2` FOREIGN KEY (`idAcom`) REFERENCES `Acompanhamento` (`idAcom`) ON DELETE SET NULL,
-  CONSTRAINT `item_ibfk_3` FOREIGN KEY (`idPedido`) REFERENCES `pedido` (`idPedido`),
-  CONSTRAINT `item_ibfk_4` FOREIGN KEY (`idUsuario`) REFERENCES `usuario` (`IdUsuario`)
+  CONSTRAINT `item_ibfk_3` FOREIGN KEY (`idPedido`) REFERENCES `pedido` (`idPedido`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -178,8 +178,11 @@ CREATE TABLE `pizza` (
   `Sabor` varchar(100) NOT NULL,
   `Preco` float NOT NULL,
   `tipo` varchar(100) NOT NULL,
+  `IdUsuario` int NOT NULL,
   PRIMARY KEY (`IdPizza`),
-  UNIQUE KEY `Sabor` (`Sabor`)
+  UNIQUE KEY `Sabor` (`Sabor`),
+  KEY `IdUsuario` (`IdUsuario`),
+  CONSTRAINT `pizza_ibfk_1` FOREIGN KEY (`IdUsuario`) REFERENCES `usuario` (`IdUsuario`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -255,4 +258,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2025-02-06 10:30:18
+-- Dump completed on 2025-02-06 11:22:11
