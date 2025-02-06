@@ -13,16 +13,23 @@ public abstract class InserirUsuario extends DbConect implements CadastroInterfa
     protected String cargo = "";
     protected String email = "";
     protected String senha = "";
+    protected String nomePizzaria = "";
+    protected String endereco = "";
+    protected String telefone = "";
+
     protected int limiteSaborPizza = 0;
 
     protected boolean CadastrarUsuario() {
-        this.setQuery("INSERT INTO usuario(nome, cargo, limiteSaborPizza, email, senha) VALUES (? , ? , ?, ?, ?)");
+        this.setQuery("INSERT INTO usuario(nome, cargo, limiteSaborPizza, email, senha, nomePizzaria, endereco, telefone) VALUES (? , ? , ?, ?, ?, ?, ?, ?)");
         try{
+            //Verifica se o email ja existe
             VerificarUsuario vUsuario = new VerificarUsuario();
-            boolean Existe = vUsuario.UsuarioExiste();
+            vUsuario.setEmail(email);
+            boolean Existe = vUsuario.Verifica();
             if(Existe){
                 throw new UsuarioJaExisteException();
             }
+
             try {
                 Connection c = StartConection();
                 PreparedStatement statement = c.prepareStatement(this.getQuery());
@@ -31,6 +38,9 @@ public abstract class InserirUsuario extends DbConect implements CadastroInterfa
                 statement.setInt(3, this.getLimiteSaborPizza());
                 statement.setString(4, this.getEmail());
                 statement.setString(5, this.getSenha());
+                statement.setString(6, this.getNomePizzaria());
+                statement.setString(7, this.getEndereco());
+                statement.setString(8, this.getTelefone());
 
                 statement.executeUpdate();
                 System.out.println("Usuario Cadastrado");
@@ -42,6 +52,30 @@ public abstract class InserirUsuario extends DbConect implements CadastroInterfa
             System.out.println(ex.getMessage());
         }
         return false;
+    }
+
+    public String getNomePizzaria() {
+        return nomePizzaria;
+    }
+
+    public void setNomePizzaria(String nomePizzaria) {
+        this.nomePizzaria = nomePizzaria;
+    }
+
+    public String getEndereco() {
+        return endereco;
+    }
+
+    public void setEndereco(String endereco) {
+        this.endereco = endereco;
+    }
+
+    public String getTelefone() {
+        return telefone;
+    }
+
+    public void setTelefone(String telefone) {
+        this.telefone = telefone;
     }
 
     public String getEmail() {

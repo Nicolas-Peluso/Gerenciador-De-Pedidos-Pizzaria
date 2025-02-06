@@ -7,10 +7,11 @@ import java.sql.SQLException;
 
 public abstract class BuscarUsuario extends DbConect{
     //Regra do sistema um usuario por restaurante
-    public boolean UsuarioExiste(){
+    public boolean UsuarioExiste(String email){
         try{
             Connection con = StartConection();
-            PreparedStatement statement = con.prepareStatement("SELECT * FROM usuario");
+            PreparedStatement statement = con.prepareStatement("SELECT email FROM usuario WHERE email = ?");
+            statement.setString(1, email);
             ResultSet rs = statement.executeQuery();
             if(!rs.next()){
                 return false;
