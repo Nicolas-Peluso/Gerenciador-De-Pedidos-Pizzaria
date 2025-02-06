@@ -1,13 +1,9 @@
 package com.nicolas;
-import java.sql.Connection;
-import java.sql.SQLException;
-
-import com.nicolas.DB.DbConect;
+import com.nicolas.Operacoes.Cadastro.Usuario.CadastraUsuario;
 
 public class Main {
-    public static void main(String[] args)throws SQLException{
-        Connection cn = DbConect.StartConection();
-        
-        DbConect.StopConection(cn);
+    public static void main(String[] args){
+        CadastraUsuario usr1 = new CadastraUsuario("Nicolas", "Gerente", 4);
+        usr1.Cadastro();
     }
 }
