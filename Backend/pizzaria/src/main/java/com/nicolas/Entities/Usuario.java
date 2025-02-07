@@ -1,7 +1,11 @@
 package com.nicolas.Entities;
 
+import com.nicolas.Exceptions.CampoVazioException;
+import com.nicolas.Exceptions.UsuarioLogadoException;
+import com.nicolas.Operacoes.Buscar.PizzaExiste.PizzaExisteV;
 import com.nicolas.Operacoes.Cadastro.Usuario.CadastraUsuario;
 import com.nicolas.Operacoes.Login.Login;
+import com.nicolas.Verificacoes.VerificaCampo;
 
 public class Usuario {
     
@@ -13,6 +17,7 @@ public class Usuario {
     private static String enderecoUsr = "";
     private static String telefoneUsr = "";
     private static int UsrId;
+    private static boolean Logado = false;
 
     public void Cadastrar(String nome, String cargo ,String email, int limiteSaborPizza, String senha ,String nomePizzaria ,String endereco , String telefone){
         CadastraUsuario usr1 = new CadastraUsuario(nome, cargo, limiteSaborPizza, email, senha, nomePizzaria, endereco, telefone);
@@ -30,8 +35,49 @@ public class Usuario {
         if(lg.VerificaCamposLogin()){
             if(lg.Login()){
                 setUsrId(lg.getUsrId());
+                setLogado(true);
             }
         }
+    }
+
+    public void CadastrarPizza(String sabor, String nome, double precoP){
+        try {
+            if(!Usuario.Logado){
+                throw new UsuarioLogadoException();
+            }
+            if(VerificaCampo.CampoVazio(new String[]{sabor, nome})){
+                throw new CampoVazioException();
+            }
+            PizzaExisteV pzv = new PizzaExisteV();
+            Pizza pizza = new Pizza();
+            
+            pizza.setTipo("pizza");
+            pizza.setSabor(sabor);
+            pizza.setNome(nome);
+            pizza.setPreco(precoP);
+
+            pizza.setPizza(pizza);
+
+            if (!pzv.VerificaPizzaExiste(nome, sabor)) {
+                pizza.CadastrarItem();
+            }
+        } catch (UsuarioLogadoException e) {
+            System.err.println(e.getMessage());
+        } catch(CampoVazioException CpvEx){
+            System.out.println(CpvEx.getMessage());
+        }
+    }
+
+    public static boolean isLogado() {
+        return Logado;
+    }
+
+    public static void setLogado(boolean logado) {
+        Logado = logado;
+    }
+
+    public void CadastrarAcompanhamento() {
+
     }
 
     public static int getLimiteSaborPizza() {

@@ -1,7 +1,9 @@
 package com.nicolas.Operacoes.Login;
+import com.nicolas.Exceptions.CampoVazioException;
 import com.nicolas.Exceptions.EmailException;
 import com.nicolas.Sql.Buscar.UsuarioLogin;
 import com.nicolas.Verificacoes.Email;
+import com.nicolas.Verificacoes.VerificaCampo;
 
 public final class Login extends UsuarioLogin{
     
@@ -10,14 +12,14 @@ public final class Login extends UsuarioLogin{
             if(!Email.VerificarEmail(super.getEmailLogin())){
                 throw new EmailException();
             }
-            if(super.getSenhaLogin().isEmpty()){
-                throw new Exception("Senha nao pode estar Vazia");
+            if(VerificaCampo.CampoVazio(new String[] {super.getSenhaLogin()})){
+                throw new CampoVazioException();
             }
         }catch(EmailException emaEx){
             System.err.println(emaEx.getMessage());
             return false;
-        } catch(Exception senEx){
-            senEx.printStackTrace();
+        } catch(CampoVazioException senEx){
+            System.out.println(senEx.getMessage());
             return false;
         }
 

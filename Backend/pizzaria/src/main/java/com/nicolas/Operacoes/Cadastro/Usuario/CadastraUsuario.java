@@ -1,9 +1,11 @@
 package com.nicolas.Operacoes.Cadastro.Usuario;
+import com.nicolas.Exceptions.CampoVazioException;
 import com.nicolas.Exceptions.EmailException;
 import com.nicolas.Exceptions.SenhaException;
 import com.nicolas.Sql.Inserir.InserirUsuario;
 import com.nicolas.Verificacoes.Email;
 import com.nicolas.Verificacoes.Senha;
+import com.nicolas.Verificacoes.VerificaCampo;
 
 public final class CadastraUsuario extends InserirUsuario{
     //classe usuario.
@@ -26,11 +28,9 @@ public final class CadastraUsuario extends InserirUsuario{
     private boolean VerificaCampos(){
         // verificação dos campos
         try {
-            if (super.getNome().isEmpty() || super.getCargo().isEmpty()
-                    || super.getEmail().isEmpty() || super.getSenha().isEmpty()
-                    || super.getNomePizzaria().isEmpty() || super.getEndereco().isEmpty()
-                    || super.getTelefone().isEmpty()) {
-                throw new Exception("Nenhum campo deve estar vazio");
+            if(VerificaCampo.CampoVazio(new String[]{super.getNome(), super.getCargo(), super.getEmail(), super.getSenha(), super.getNomePizzaria(), super.getEndereco()
+            ,super.getTelefone()})){
+                throw new CampoVazioException();
             }
             if (super.getLimiteSaborPizza() < 1) {
                 throw new Exception("O limite de sabores em uma pizza nao pode ser 0 deve ser 1 ou mais");
@@ -54,6 +54,9 @@ public final class CadastraUsuario extends InserirUsuario{
                 return false;
             }
 
+        } catch (CampoVazioException genEx) {
+            System.err.println(genEx.getMessage());
+            return false;
         } catch (Exception genEx) {
             System.err.println(genEx.getMessage());
             return false;
