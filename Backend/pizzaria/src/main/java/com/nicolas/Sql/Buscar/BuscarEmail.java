@@ -5,7 +5,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException; 
 
-public abstract class BuscarUsuario extends DbConect{
+public abstract class BuscarEmail extends DbConect{
     //Regra do sistema um usuario por restaurante
     public boolean UsuarioExiste(String email){
         try{
@@ -17,6 +17,7 @@ public abstract class BuscarUsuario extends DbConect{
                 StopConection(con);
                 return false;
         }
+            StopConection(con);
         }catch(SQLException ex){
             System.out.println(ex.getMessage());
         }

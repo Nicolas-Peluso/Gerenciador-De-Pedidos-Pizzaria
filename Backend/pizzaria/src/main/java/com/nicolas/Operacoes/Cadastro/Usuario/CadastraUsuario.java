@@ -5,7 +5,7 @@ import com.nicolas.Sql.Inserir.InserirUsuario;
 import com.nicolas.Verificacoes.Email;
 import com.nicolas.Verificacoes.Senha;
 
-public class CadastraUsuario extends InserirUsuario{
+public final class CadastraUsuario extends InserirUsuario{
     //classe usuario.
 
     public CadastraUsuario(String nome, String cargo, int limiteSaborPizza, String email, String senha, String NomePizzaria,

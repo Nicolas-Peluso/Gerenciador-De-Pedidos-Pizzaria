@@ -51,6 +51,7 @@ public abstract class InserirUsuario extends DbConect implements CadastroInterfa
 
                     statement.executeUpdate();
                     System.out.println("Usuario Cadastrado");
+                    StopConection(c);
                     return true;
             } catch (SQLException ex) {
                 System.out.println(ex.getMessage());

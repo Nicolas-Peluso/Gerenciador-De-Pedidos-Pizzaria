@@ -2,7 +2,7 @@ package com.nicolas.Verificacoes;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class Senha {
+public final class Senha {
     private static final String check8Caracteres = "^.{8,}$";
     private static final String checkLetra = "^(?=.*[A-Za-z]).*$";
     private static final String checkNumero = "^(?=.*\\d).*$";

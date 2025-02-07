@@ -7,7 +7,7 @@ import java.sql.ResultSet;
 
 import com.nicolas.DB.DbConect;
 
-public abstract class PizzariaNomeExiste extends DbConect{
+public abstract class PizzariaNome extends DbConect{
     //Uma unica Pizzaria por nome
     public boolean BuscarPizzariaNome(String PizzariaNome){
         try{
@@ -16,8 +16,10 @@ public abstract class PizzariaNomeExiste extends DbConect{
             statement.setString(1, PizzariaNome);
             ResultSet resultSet = statement.executeQuery();
             if(!resultSet.next()){
+                StopConection(cn);
                 return false;
             }
+            StopConection(cn);
         }catch(SQLException ex){
             ex.printStackTrace();
         }

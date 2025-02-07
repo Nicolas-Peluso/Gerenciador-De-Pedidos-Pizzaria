@@ -1,11 +1,12 @@
 package com.nicolas;
-import com.nicolas.Operacoes.Cadastro.Usuario.CadastraUsuario;
+import com.nicolas.Entities.Usuario;
 
 public class Main {
     public static void main(String[] args){
-        CadastraUsuario usr1 = new CadastraUsuario("Nicolas", "Gerente", 
-        4, "nicolastsestssse@gmail.com",
-        "aaaaaaaaa", "Pizzaria Agua Na Boca - pq", "rua alceu luchiari", "11 91232324");
-        System.out.println(usr1.Cadastro());
+        Usuario usuario = new Usuario();
+        usuario.Cadastrar("Nicolas", "Auxiliar", "NicolasAux@gmail.com", 1, "123456789a", "Jose boni", "adssssss", "11221212");
+        //usuario.Login("NicolasAux@gmail.com", "123456789a");
+
+        System.out.println(Usuario.getUsrId());
     }
 }
