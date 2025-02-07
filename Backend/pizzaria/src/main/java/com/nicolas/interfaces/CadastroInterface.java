@@ -10,5 +10,5 @@ public interface CadastroInterface {
     String SetEndereco(String d);
     String SetTelefone(String d);
     int SetLimiteSaborPorPizza(int c);
-
+    
 }

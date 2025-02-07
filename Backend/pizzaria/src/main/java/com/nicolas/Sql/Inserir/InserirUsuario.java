@@ -10,6 +10,7 @@ import java.sql.SQLException;
 import java.sql.PreparedStatement;
 
 public abstract class InserirUsuario extends DbConect implements CadastroInterface{
+    
     private String Query = "";
     protected String nome = "";
     protected String cargo = "";
@@ -29,6 +30,7 @@ public abstract class InserirUsuario extends DbConect implements CadastroInterfa
             if(vUsuario.UsuarioExiste(email)){
                 throw new UsuarioJaExisteException();
             }
+            
             try{
                 pizzariaNome Pnome = new pizzariaNome();
                 if(Pnome.BuscarPizzariaNome(nomePizzaria)){
