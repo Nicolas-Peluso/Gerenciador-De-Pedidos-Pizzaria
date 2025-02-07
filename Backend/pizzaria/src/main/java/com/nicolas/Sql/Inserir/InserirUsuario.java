@@ -1,8 +1,10 @@
 package com.nicolas.Sql.Inserir;
 import java.sql.Connection;
 import com.nicolas.DB.DbConect;
+import com.nicolas.Exceptions.PizzzariaJaCadastradaException;
 import com.nicolas.Exceptions.UsuarioJaExisteException;
 import com.nicolas.Operacoes.BuscarUsuario.VerificarUsuario;
+import com.nicolas.Operacoes.BuscarUsuario.pizzariaNome.pizzariaNome;
 import com.nicolas.interfaces.CadastroInterface;
 import java.sql.SQLException;
 import java.sql.PreparedStatement;
@@ -24,29 +26,35 @@ public abstract class InserirUsuario extends DbConect implements CadastroInterfa
         try{
             //Verifica se o email ja existe
             VerificarUsuario vUsuario = new VerificarUsuario();
-            vUsuario.setEmail(email);
-            boolean Existe = vUsuario.Verifica();
-            if(Existe){
+            if(vUsuario.UsuarioExiste(email)){
                 throw new UsuarioJaExisteException();
             }
+            try{
+                pizzariaNome Pnome = new pizzariaNome();
+                if(Pnome.BuscarPizzariaNome(nomePizzaria)){
+                    throw new PizzzariaJaCadastradaException();
+                }
 
-            try {
-                Connection c = StartConection();
-                PreparedStatement statement = c.prepareStatement(this.getQuery());
-                statement.setString(1, this.getNome());
-                statement.setString(2, this.getCargo());
-                statement.setInt(3, this.getLimiteSaborPizza());
-                statement.setString(4, this.getEmail());
-                statement.setString(5, this.getSenha());
-                statement.setString(6, this.getNomePizzaria());
-                statement.setString(7, this.getEndereco());
-                statement.setString(8, this.getTelefone());
+                try {
+                    Connection c = StartConection();
+                    PreparedStatement statement = c.prepareStatement(this.getQuery());
+                    statement.setString(1, this.getNome());
+                    statement.setString(2, this.getCargo());
+                    statement.setInt(3, this.getLimiteSaborPizza());
+                    statement.setString(4, this.getEmail());
+                    statement.setString(5, this.getSenha());
+                    statement.setString(6, this.getNomePizzaria());
+                    statement.setString(7, this.getEndereco());
+                    statement.setString(8, this.getTelefone());
 
-                statement.executeUpdate();
-                System.out.println("Usuario Cadastrado");
-                return true;
+                    statement.executeUpdate();
+                    System.out.println("Usuario Cadastrado");
+                    return true;
             } catch (SQLException ex) {
                 System.out.println(ex.getMessage());
+            }
+            } catch(PizzzariaJaCadastradaException exz){
+                System.out.println(exz.getMessage());
             }
         } catch(UsuarioJaExisteException ex){
             System.out.println(ex.getMessage());

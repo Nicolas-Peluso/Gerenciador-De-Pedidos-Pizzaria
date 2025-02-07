@@ -8,6 +8,6 @@ public class UsuarioJaExisteException extends Exception{
 
     @Override
     public String getMessage() {
-        return "Usuario ja Cadastrado, faça login";
+        return "Esse email ja esta sendo usado, faça login";
     }
 }

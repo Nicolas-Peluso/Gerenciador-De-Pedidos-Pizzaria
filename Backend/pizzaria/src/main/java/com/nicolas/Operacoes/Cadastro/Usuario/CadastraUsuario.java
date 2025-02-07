@@ -5,7 +5,7 @@ public class CadastraUsuario extends InserirUsuario{
     //classe usuario.
 
     public CadastraUsuario(String nome, String cargo, int limiteSaborPizza, String email, String senha, String NomePizzaria,
-            String endereco, String telefone){
+        String endereco, String telefone){
         super.setNome(SetNome(nome));
         super.setCargo(SetCargo(cargo));
         super.setLimiteSaborPizza(SetLimiteSaborPorPizza(limiteSaborPizza));
@@ -14,7 +14,6 @@ public class CadastraUsuario extends InserirUsuario{
         super.setNomePizzaria(SetNomeDaPizzaria(NomePizzaria));
         super.setEndereco(SetEndereco(endereco));
         super.setTelefone(SetTelefone(telefone));
-
     }
     
     public void Cadastro(){

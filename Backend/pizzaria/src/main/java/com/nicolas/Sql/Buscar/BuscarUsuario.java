@@ -14,6 +14,7 @@ public abstract class BuscarUsuario extends DbConect{
             statement.setString(1, email);
             ResultSet rs = statement.executeQuery();
             if(!rs.next()){
+                StopConection(con);
                 return false;
         }
         }catch(SQLException ex){
