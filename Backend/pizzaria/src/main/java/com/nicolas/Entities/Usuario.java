@@ -40,18 +40,18 @@ public class Usuario {
         }
     }
 
-    public void CadastrarPizza(String sabor, String nome, double precoP){
+    public void CadastrarPizza(String sabor, String nome, double precoP, String tipo){
         try {
             if(!Usuario.Logado){
                 throw new UsuarioLogadoException();
             }
-            if(VerificaCampo.CampoVazio(new String[]{sabor, nome})){
+            if(VerificaCampo.CampoVazio(new String[]{sabor, nome, tipo})){
                 throw new CampoVazioException();
             }
             PizzaExisteV pzv = new PizzaExisteV();
             Pizza pizza = new Pizza();
             
-            pizza.setTipo("pizza");
+            pizza.setTipo(tipo);
             pizza.setSabor(sabor);
             pizza.setNome(nome);
             pizza.setPreco(precoP);
@@ -67,6 +67,8 @@ public class Usuario {
             System.out.println(CpvEx.getMessage());
         }
     }
+
+    //Cadastrar Acompanhamento
 
     public static boolean isLogado() {
         return Logado;

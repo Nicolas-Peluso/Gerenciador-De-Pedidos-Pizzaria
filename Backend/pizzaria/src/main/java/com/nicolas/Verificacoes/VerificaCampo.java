@@ -6,7 +6,7 @@ public class VerificaCampo {
      * @param campo
      *array de String
      * @return
-     *retorna true se o valor do null ou vazio.
+     *retorna true se o valor do campo for null ou vazio.
      */
     public static boolean CampoVazio(String[] campo){
         for(String cp : campo){
