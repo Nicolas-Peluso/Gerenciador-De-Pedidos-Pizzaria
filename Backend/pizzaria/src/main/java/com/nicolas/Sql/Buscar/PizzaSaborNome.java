@@ -7,8 +7,9 @@ import java.sql.SQLException;
 import com.nicolas.DB.DbConect;
 import com.nicolas.Entities.Usuario;
 import com.nicolas.Exceptions.SaborDePizzaJaExisteException;
+import com.nicolas.HttpReq.CaptureMessageAndCode;
 
-public abstract class PizzaSaborNome extends DbConect{
+public final class PizzaSaborNome extends DbConect{
 
     public boolean VerificaPizzaExiste(String PizzaNome, String PizzaSabor){
         try{
@@ -28,7 +29,8 @@ public abstract class PizzaSaborNome extends DbConect{
         }catch(SQLException ex){
             ex.printStackTrace();
         } catch(SaborDePizzaJaExisteException pjEx){
-            System.err.println(pjEx.getMessage());
+            CaptureMessageAndCode.setMessage(pjEx.getMessage());
+            CaptureMessageAndCode.setCodeErro(405);
             return true;
         }
         return false;
