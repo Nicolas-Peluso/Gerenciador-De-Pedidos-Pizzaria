@@ -1,15 +1,10 @@
 package com.nicolas.Sql.Inserir;
 import java.sql.Connection;
 import com.nicolas.DB.DbConect;
-import com.nicolas.Exceptions.PizzzariaJaCadastradaException;
-import com.nicolas.Exceptions.UsuarioJaExisteException;
-import com.nicolas.Operacoes.Buscar.VerificarUsuario;
-import com.nicolas.Operacoes.Buscar.pizzariaNome.pizzariaNome;
-import com.nicolas.interfaces.CadastroInterface;
 import java.sql.SQLException;
 import java.sql.PreparedStatement;
 
-public abstract class InserirUsuario extends DbConect implements CadastroInterface{
+public abstract class InserirUsuario extends DbConect{
     
     private String Query = "";
     protected String nome = "";
@@ -24,19 +19,6 @@ public abstract class InserirUsuario extends DbConect implements CadastroInterfa
 
     protected boolean CadastrarUsuario() {
         this.setQuery("INSERT INTO usuario(nome, cargo, limiteSaborPizza, email, senha, nomePizzaria, endereco, telefone) VALUES (? , ? , ?, ?, ?, ?, ?, ?)");
-        try{
-            //Verifica se o email ja existe
-            VerificarUsuario vUsuario = new VerificarUsuario();
-            if(vUsuario.UsuarioExiste(email)){
-                throw new UsuarioJaExisteException();
-            }
-            
-            try{
-                pizzariaNome Pnome = new pizzariaNome();
-                if(Pnome.BuscarPizzariaNome(nomePizzaria)){
-                    throw new PizzzariaJaCadastradaException();
-                }
-
                 try {
                     Connection c = StartConection();
                     PreparedStatement statement = c.prepareStatement(this.getQuery());
@@ -56,12 +38,6 @@ public abstract class InserirUsuario extends DbConect implements CadastroInterfa
             } catch (SQLException ex) {
                 System.out.println(ex.getMessage());
             }
-            } catch(PizzzariaJaCadastradaException exz){
-                System.out.println(exz.getMessage());
-            }
-        } catch(UsuarioJaExisteException ex){
-            System.out.println(ex.getMessage());
-        }
         return false;
     }
 

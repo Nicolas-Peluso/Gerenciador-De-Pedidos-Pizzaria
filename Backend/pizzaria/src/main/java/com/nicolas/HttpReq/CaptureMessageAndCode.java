@@ -4,7 +4,7 @@ import java.util.HashMap;
 
 import com.google.gson.Gson;
 
-public class CaptureException {
+public class CaptureMessageAndCode {
     private static String message = "";
     private static int CodeErro = 0;
     
@@ -17,7 +17,7 @@ public class CaptureException {
     }
 
     public static void setMessage(String message) {
-        CaptureException.message = message;
+        CaptureMessageAndCode.message = message;
     }
 
     public static int getCodeErro() {

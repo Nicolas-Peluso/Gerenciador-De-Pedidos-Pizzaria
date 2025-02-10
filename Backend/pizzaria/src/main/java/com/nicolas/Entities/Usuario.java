@@ -3,8 +3,6 @@ package com.nicolas.Entities;
 import com.nicolas.Exceptions.CampoVazioException;
 import com.nicolas.Exceptions.UsuarioLogadoException;
 import com.nicolas.Operacoes.Buscar.PizzaExiste.PizzaExisteV;
-import com.nicolas.Operacoes.Cadastro.Usuario.CadastraUsuario;
-import com.nicolas.Operacoes.Login.Login;
 import com.nicolas.Verificacoes.VerificaCampo;
 
 public class Usuario {
@@ -19,25 +17,14 @@ public class Usuario {
     private static int UsrId;
     private static boolean Logado = false;
 
-    public void Cadastrar(String nome, String cargo ,String email, int limiteSaborPizza, String senha ,String nomePizzaria ,String endereco , String telefone){
-        CadastraUsuario usr1 = new CadastraUsuario(nome, cargo, limiteSaborPizza, email, senha, nomePizzaria, endereco, telefone);
-        
-        if(usr1.Cadastro()){
-            this.Login(email, senha);
-        }
-    }
-
-    public void Login(String emailLogin, String senhaLogin){
-        Login lg = new Login();
-        lg.setEmailLogin(emailLogin);
-        lg.setSenhaLogin(senhaLogin);
-
-        if(lg.VerificaCamposLogin()){
-            if(lg.Login()){
-                setUsrId(lg.getUsrId());
-                setLogado(true);
-            }
-        }
+    public Usuario(int id, String nome, String cargo, int limiteSaborPizza, String nomePizzaria, String endereco, String telefone) {
+        setUsrId(id);
+        setNomeUsr(nome);
+        setCargoUsr(cargo);
+        setLimiteSaborPizza(limiteSaborPizza);
+        setNomePizzariaUsr(nomePizzaria);
+        setEnderecoUsr(endereco);
+        setTelefoneUsr(telefone);
     }
 
     public void CadastrarPizza(String sabor, String nome, double precoP, String tipo){

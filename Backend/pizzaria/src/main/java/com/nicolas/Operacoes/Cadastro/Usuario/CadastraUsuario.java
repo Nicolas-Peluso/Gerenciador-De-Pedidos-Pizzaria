@@ -1,31 +1,20 @@
 package com.nicolas.Operacoes.Cadastro.Usuario;
 import com.nicolas.Exceptions.CampoVazioException;
 import com.nicolas.Exceptions.EmailException;
+import com.nicolas.Exceptions.PizzzariaJaCadastradaException;
 import com.nicolas.Exceptions.SenhaException;
+import com.nicolas.Exceptions.UsuarioJaExisteException;
+import com.nicolas.HttpReq.CaptureMessageAndCode;
+import com.nicolas.Operacoes.Buscar.VerificarUsuario;
+import com.nicolas.Operacoes.Buscar.pizzariaNome.pizzariaNome;
 import com.nicolas.Sql.Inserir.InserirUsuario;
 import com.nicolas.Verificacoes.Email;
 import com.nicolas.Verificacoes.Senha;
 import com.nicolas.Verificacoes.VerificaCampo;
 
 public final class CadastraUsuario extends InserirUsuario{
-    //classe usuario.
 
-    public CadastraUsuario(String nome, String cargo, int limiteSaborPizza, String email, String senha, String NomePizzaria,
-        String endereco, String telefone){
-        super.setNome(SetNome(nome));
-        super.setCargo(SetCargo(cargo));
-        super.setLimiteSaborPizza(SetLimiteSaborPorPizza(limiteSaborPizza));
-
-        super.setEmail(SetEmail(email));
-        super.setSenha(SetSenha(senha));
-
-        super.setNomePizzaria(SetNomeDaPizzaria(NomePizzaria));
-
-        super.setEndereco(SetEndereco(endereco));
-        super.setTelefone(SetTelefone(telefone));
-    }
-    
-    private boolean VerificaCampos(){
+    public boolean VerificaCampos(){
         // verificação dos campos
         try {
             if(VerificaCampo.CampoVazio(new String[]{super.getNome(), super.getCargo(), super.getEmail(), super.getSenha(), super.getNomePizzaria(), super.getEndereco()
@@ -40,7 +29,8 @@ public final class CadastraUsuario extends InserirUsuario{
                     throw new EmailException();
                 }
             } catch (EmailException em) {
-                System.out.println(em.getMessage());
+                CaptureMessageAndCode.setMessage(em.getMessage());
+                CaptureMessageAndCode.setCodeErro(405);
                 return false;
             }
 
@@ -50,15 +40,18 @@ public final class CadastraUsuario extends InserirUsuario{
                     throw new SenhaException(tempMsg);
                 }
             } catch (SenhaException em) {
-                System.out.println(em.getMessage());
+                CaptureMessageAndCode.setMessage(em.getMessage());
+                CaptureMessageAndCode.setCodeErro(200);
                 return false;
             }
 
         } catch (CampoVazioException genEx) {
-            System.err.println(genEx.getMessage());
+            CaptureMessageAndCode.setMessage(genEx.getMessage());
+            CaptureMessageAndCode.setCodeErro(405);
             return false;
         } catch (Exception genEx) {
-            System.err.println(genEx.getMessage());
+            CaptureMessageAndCode.setMessage(genEx.getMessage());
+            CaptureMessageAndCode.setCodeErro(405);
             return false;
         }
 
@@ -66,50 +59,25 @@ public final class CadastraUsuario extends InserirUsuario{
     }
 
     public boolean Cadastro(){
-        if(this.VerificaCampos()){
-            return CadastrarUsuario();
+         try{
+            VerificarUsuario vUsuario = new VerificarUsuario();
+            if(vUsuario.UsuarioExiste(email)){
+                throw new UsuarioJaExisteException();
+            }
+            try{
+                pizzariaNome Pnome = new pizzariaNome();
+                if(Pnome.BuscarPizzariaNome(nomePizzaria)){
+                    throw new PizzzariaJaCadastradaException();
+                }
+                return CadastrarUsuario();
+            } catch (PizzzariaJaCadastradaException exz) {
+                CaptureMessageAndCode.setMessage(exz.getMessage());
+                CaptureMessageAndCode.setCodeErro(405);
+            }
+        } catch (UsuarioJaExisteException ex) {
+            CaptureMessageAndCode.setMessage(ex.getMessage());
+            CaptureMessageAndCode.setCodeErro(405);
         }
         return false;
     }
-
-    @Override
-    public String SetNome(String nome) {
-        return nome;
-    }
-
-    @Override
-    public String SetCargo(String cargo) {
-        return cargo;
-    }
-
-    @Override
-    public int SetLimiteSaborPorPizza(int limite) {
-        return limite;
-    }
-
-    @Override
-    public String SetEmail(String email) {
-        return email;
-    }
-
-    @Override
-    public String SetSenha(String senha) {
-       return senha;
-    }
-
-    @Override
-    public String SetNomeDaPizzaria(String nomePizzaria) {
-        return nomePizzaria;
-    }
-
-    @Override
-    public String SetEndereco(String Ender) {
-        return Ender;
-    }
-
-    @Override
-    public String SetTelefone(String tel) {
-        return tel;
-    }
-    
 }
