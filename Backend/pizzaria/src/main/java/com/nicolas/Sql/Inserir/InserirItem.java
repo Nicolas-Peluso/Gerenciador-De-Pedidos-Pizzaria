@@ -16,12 +16,15 @@ public abstract class InserirItem extends DbConect{
     public boolean inserirPizza(){
         try{
             Connection con = StartConection();
-            PreparedStatement statement = con.prepareStatement("INSERT INTO pizza(Sabor, nome, Preco, IdUsuario) VALUES(?, ?, ?, ?)");
-            statement.setString(1, pizza.getSabor());
-            statement.setString(2, pizza.getNome());
-            statement.setDouble(3, pizza.getPreco());
+            PreparedStatement statement = con.prepareStatement("INSERT INTO pizza(Sabor, nome, Preco, IdUsuario, tipo) VALUES(?, ?, ?, ?, ?)");
+            statement.setString(1, this.pizza.getSabor());
+            statement.setString(2, this.pizza.getNome());
+            statement.setDouble(3, this.pizza.getPreco());
             statement.setInt(4, Usuario.getUsrId());
+            statement.setString(5, this.pizza.getTipo());
+
             statement.executeUpdate();
+            setPizza(null);
             return true;
         } catch(SQLException sqlEx){
             sqlEx.printStackTrace();
@@ -29,11 +32,19 @@ public abstract class InserirItem extends DbConect{
         }
     }
 
-    protected boolean inserirAcompanhamento() {
+    public boolean inserirAcompanhamento() {
         try {
             Connection con = StartConection();
-            PreparedStatement statement = con.prepareStatement("INSERT INTO Acompanhamento() VALUES(?, ?, ?, ?)");
-            statement.executeQuery();
+            PreparedStatement statement = con.prepareStatement("INSERT INTO Acompanhamento(nome, preco, obs, IdUsuario, tipo) VALUES(?, ?, ?, ?, ?)");
+            
+            statement.setString(1, this.acompanhamento.getNome());
+            statement.setDouble(2, this.acompanhamento.getPreco());
+            statement.setString(3, this.acompanhamento.getObs());
+            statement.setInt(4, Usuario.getUsrId());
+            statement.setString(5, this.acompanhamento.getTipo());
+
+            statement.executeUpdate();
+            setAcompanhamento(null);
             return true;
         } catch (SQLException sqlEx) {
             sqlEx.printStackTrace();

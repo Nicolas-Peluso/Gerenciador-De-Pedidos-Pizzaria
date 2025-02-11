@@ -10,6 +10,15 @@ public abstract class Handle extends CaptureMessageAndCode implements HttpHandle
     @Override
     public void handle(HttpExchange exchange) throws IOException {
         try{
+            exchange.getResponseHeaders().add("Access-Control-Allow-Origin", "*");
+            exchange.getResponseHeaders().add("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS");
+            exchange.getResponseHeaders().add("Access-Control-Allow-Headers", "Content-Type, Authorization");
+
+            if ("OPTIONS".equals(exchange.getRequestMethod())) {
+                exchange.sendResponseHeaders(201, -1);
+                return;
+            }
+
             handleRequest(exchange);
         }catch(IOException ec){
             exchange.sendResponseHeaders(CaptureMessageAndCode.getCodeErro(), CaptureMessageAndCode.getMessage().getBytes().length);

@@ -6,6 +6,7 @@ import java.io.OutputStream;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
+import com.nicolas.Entities.Acompanhamento;
 import com.nicolas.Entities.Pizza;
 import com.nicolas.Entities.Usuario;
 import com.nicolas.HttpReq.CaptureMessageAndCode;
@@ -38,17 +39,19 @@ public class CadastraItemControle extends Handle{
 
                 String NomePizza = jsonObject.get("nome").getAsString();
                 String SaborPìzza = jsonObject.get("sabor").getAsString();
+                String TipoDaPizza = jsonObject.get("tipoPizza").getAsString();
                 double PrecoPizza = jsonObject.get("preco").getAsDouble();
 
-                if(!pizza.ValidarCamposItem(NomePizza, SaborPìzza, PrecoPizza)){
-                    throw new IOException();
-                }
-                
                 pizza.setNome(NomePizza);
                 pizza.setSabor(SaborPìzza);
                 pizza.setPreco(PrecoPizza);
-                
+                pizza.setTipo(TipoDaPizza);
+
                 item.setPizza(pizza);
+
+                if(!item.ValidarCamposItem(new String[] {NomePizza, SaborPìzza}, PrecoPizza)){
+                    throw new IOException();
+                }
                 
                 if(!item.inserirPizza()){
                     CaptureMessageAndCode.setCodeErro(404);
@@ -63,6 +66,40 @@ public class CadastraItemControle extends Handle{
                 os.write(CaptureMessageAndCode.getMessage().getBytes());
                 os.close();
             }
+
+            //Cadastrar Acompanhamento
+            CadastrarItem item = new CadastrarItem();
+            Acompanhamento acom = new Acompanhamento();
+
+            String nomeAcom = jsonObject.get("nome").getAsString();
+            String ObsAcom = jsonObject.get("obs").getAsString();
+            String TipoAcompanhamento = jsonObject.get("tipoAcompanhamento").getAsString();
+            double PrecoAcom = jsonObject.get("preco").getAsDouble();
+
+            acom.setNome(nomeAcom);
+            acom.setObs(ObsAcom);
+            acom.setPreco(PrecoAcom);
+            acom.setTipo(TipoAcompanhamento);
+
+            item.setAcompanhamento(acom);
+
+            if (!item.ValidarCamposItem(new String[] { nomeAcom, ObsAcom }, PrecoAcom)) {
+                throw new IOException();
+            }
+
+            if (!item.inserirAcompanhamento()) {
+                CaptureMessageAndCode.setCodeErro(404);
+                CaptureMessageAndCode.setMessage("Algo deu errado na manipulação");
+                throw new IOException();
+            }
+
+            CaptureMessageAndCode.setMessage("Item Cadastrado com sucesso");
+            CaptureMessageAndCode.setCodeErro(201);
+            exchange.sendResponseHeaders(CaptureMessageAndCode.getCodeErro(),
+            CaptureMessageAndCode.getMessage().getBytes().length);
+            OutputStream os = exchange.getResponseBody();
+            os.write(CaptureMessageAndCode.getMessage().getBytes());
+            os.close();
 
         } else {
             CaptureMessageAndCode.setCodeErro(405);

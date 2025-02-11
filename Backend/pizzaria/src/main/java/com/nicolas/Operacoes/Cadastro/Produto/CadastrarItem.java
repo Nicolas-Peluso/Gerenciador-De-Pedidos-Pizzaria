@@ -1,22 +1,42 @@
 package com.nicolas.Operacoes.Cadastro.Produto;
+import com.nicolas.Exceptions.AcompanhamentoExisteException;
 import com.nicolas.Exceptions.CampoVazioException;
 import com.nicolas.Exceptions.SaborDePizzaJaExisteException;
 import com.nicolas.HttpReq.CaptureMessageAndCode;
+import com.nicolas.Sql.Buscar.AcompanhamentoExiste;
 import com.nicolas.Sql.Buscar.PizzaSaborNome;
 import com.nicolas.Sql.Inserir.InserirItem;
 import com.nicolas.Verificacoes.VerificaCampo;
 
 public class CadastrarItem extends InserirItem{
 
-    public boolean ValidarCamposItem(String nome, String sabor, double preco){
+    public boolean ValidarCamposItem(String[] campos, double preco){
          try {
-            if(VerificaCampo.CampoVazio(new String[]{sabor, nome})){
+            if(VerificaCampo.CampoVazio(campos)){
                 throw new CampoVazioException();
             }
-            PizzaSaborNome pzv = new PizzaSaborNome();
 
-            if (pzv.VerificaPizzaExiste(nome, sabor)) {
-                throw new SaborDePizzaJaExisteException();   
+            if (super.getPizza() != null) {
+                PizzaSaborNome pzv = new PizzaSaborNome();
+
+                if(pzv.VerificaPizzaExiste(super.getPizza().getNome(), super.getPizza().getSabor())){
+                    throw new SaborDePizzaJaExisteException();   
+                }
+
+                if(super.getPizza().getTipo().isEmpty()){
+                    super.getPizza().setTipo("pizza");
+                }
+            }
+
+            if(super.getAcompanhamento() != null){
+                AcompanhamentoExiste acompanhamentoExiste = new AcompanhamentoExiste();
+                if(acompanhamentoExiste.VerificaAcompanhamento(super.getAcompanhamento().getNome())){
+                    throw new AcompanhamentoExisteException();
+                }
+
+                if (super.getAcompanhamento().getTipo().isEmpty()) {
+                    super.getAcompanhamento().setTipo("acompanhamento");
+                }
             }
 
             if(preco < 1){
@@ -29,6 +49,10 @@ public class CadastrarItem extends InserirItem{
             return false;
         }catch(SaborDePizzaJaExisteException pzv){
             CaptureMessageAndCode.setMessage(pzv.getMessage());
+            CaptureMessageAndCode.setCodeErro(405);
+            return false;
+        }catch (AcompanhamentoExisteException ace) {
+            CaptureMessageAndCode.setMessage(ace.getMessage());
             CaptureMessageAndCode.setCodeErro(405);
             return false;
         }catch(Exception e){
