@@ -27,6 +27,11 @@ public class Usuario {
 
     //Cadastrar Acompanhamento
 
+    
+    /**
+     * @return
+     * retorna true se usuario estiver logado
+     */
     public static boolean isLogado() {
         try{
             if(Logado == false){

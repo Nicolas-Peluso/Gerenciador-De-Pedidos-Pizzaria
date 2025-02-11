@@ -6,6 +6,16 @@ public abstract class Item extends CadastrarItem{
     private String nome = "";
     private double preco;
     private String tipo = "";
+    private int Id = 0;
+
+    public int getId() {
+            return Id;
+        }
+
+        public void setId(int id) {
+            Id = id;
+    }
+
 
     public String getTipo() {
         return tipo;
