@@ -46,11 +46,11 @@ public class CadastroPedidoControle extends Handle{
 
             pd.setFormaDePagamento(jsonO.get("formaDePagamentoPedido").getAsString());
             pd.setDinheiro(jsonO.get("dinherioPedido").getAsBoolean());
-            pd.setValorTotal(jsonO.get("valorTotalPedido").getAsDouble());
-            pd.setTempoEspera(jsonO.get("tempoDeEsperaPedido").getAsString());
             pd.setPix(jsonO.get("pixPedido").getAsBoolean());
             pd.setPagamentoConfirmado(jsonO.get("pagamentoConfirmadoPedido").getAsBoolean());
-
+            pd.setValorDoCliente(jsonO.get("valorDoCliente").getAsDouble());
+            pd.setTempoEspera(Usuario.getTempoMedioDeDelivery());
+            
             pd.setPd(pd);
 
             if(!pd.VerificaCampoPedido()){
@@ -64,15 +64,21 @@ public class CadastroPedidoControle extends Handle{
 
             //Se nenhum erro com os campos, tipos de dados etc... Cadastra o pedido completo em uma trasação onde se nao for possivel cadastrar um vai dar erro
             if(!pd.CadastrarPedidoCompleto(cl)){
-                CaptureMessageAndCode.setMessage("teste");
                 throw new IOException();
             }
 
-            CaptureMessageAndCode.setMessage("Pedido Cadastrado com sucesso");
+            pd.CalculaValorTotal();
+            pd.CalculaTroco();
+            
+            CaptureMessageAndCode.setTempoDeEspera(pd.getTempoEspera());
+            CaptureMessageAndCode.setValorTotal(pd.getValorTotal());
+            CaptureMessageAndCode.setTrocoa(pd.getTroco());
+            CaptureMessageAndCode.setReturnPedidoJson();
             CaptureMessageAndCode.setCodeErro(201);
-            exchange.sendResponseHeaders(CaptureMessageAndCode.getCodeErro(), CaptureMessageAndCode.getMessage().getBytes().length);
+
+            exchange.sendResponseHeaders(CaptureMessageAndCode.getCodeErro(), CaptureMessageAndCode.setReturnPedidoJson().getBytes().length);
             OutputStream os = exchange.getResponseBody();
-            os.write(CaptureMessageAndCode.getMessage().getBytes());
+            os.write(CaptureMessageAndCode.setReturnPedidoJson().getBytes());
             os.close();
 
         }else{

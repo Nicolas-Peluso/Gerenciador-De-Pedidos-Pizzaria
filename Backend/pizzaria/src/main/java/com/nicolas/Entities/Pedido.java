@@ -6,10 +6,29 @@ import com.nicolas.Operacoes.Cadastro.Pedido.PedidoOp;
 public class Pedido extends PedidoOp{
     private String formaDePagamento = "";
     private double valorTotal;
-    private String tempoEspera;
+    private String tempoEspera = "";
     private boolean dinheiro;
     private boolean pix;
     private boolean pagamentoConfirmado;
+    private double valorDoCliente;
+    private double troco;
+
+    public double getTroco() {
+        return troco;
+    }
+
+    public void setTroco(double troco) {
+        this.troco = troco;
+    }
+
+    public double getValorDoCliente() {
+        return valorDoCliente;
+    }
+
+    public void setValorDoCliente(double valorDoCliente) {
+        this.valorDoCliente = valorDoCliente;
+    }
+
     private ArrayList<Item> itens = new ArrayList<>();
     private static int idPedido = 0;
 

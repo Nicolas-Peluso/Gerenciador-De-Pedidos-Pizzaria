@@ -3,9 +3,11 @@ import java.sql.Connection;
 
 import com.nicolas.Entities.Cliente;
 import com.nicolas.Exceptions.CampoVazioException;
+import com.nicolas.Exceptions.ClienteExisteException;
 import com.nicolas.Exceptions.ExceptionGenerica;
 import com.nicolas.Exceptions.UsuarioLogadoException;
 import com.nicolas.HttpReq.CaptureMessageAndCode;
+import com.nicolas.Sql.Buscar.ClienteBusca;
 import com.nicolas.Sql.Inserir.InserirCliente;
 import com.nicolas.Verificacoes.VerificaCampo;
 
@@ -28,6 +30,14 @@ public class ClienteOp extends InserirCliente{
             }) || VerificaCampo.CampoVazio(new int[] {super.getCliente().getNumeroResidencia()})){
                 throw new CampoVazioException();
             }
+
+            //verifica se um cliente ja existe no banco
+            ClienteBusca Cb = new ClienteBusca();
+            Cb.setNome(super.getCliente().getNome());
+            if (Cb.ClienteId() != -1) {
+                throw new ClienteExisteException();
+            }
+
             return true;
         }catch(UsuarioLogadoException uslo){
             CaptureMessageAndCode.setMessage(uslo.getMessage());
@@ -35,6 +45,10 @@ public class ClienteOp extends InserirCliente{
             return false;
         } catch(CampoVazioException czE){
             CaptureMessageAndCode.setMessage(czE.getMessage());
+            CaptureMessageAndCode.setCodeErro(405);
+            return false;
+        } catch(ClienteExisteException cx){
+            CaptureMessageAndCode.setMessage(cx.getMessage());
             CaptureMessageAndCode.setCodeErro(405);
             return false;
         }
@@ -46,7 +60,7 @@ public class ClienteOp extends InserirCliente{
              if(id == -1){
                 throw new ExceptionGenerica();
             }
-            
+
             Cliente.setClienteId(id);
             return true;
         } catch (ExceptionGenerica e) {

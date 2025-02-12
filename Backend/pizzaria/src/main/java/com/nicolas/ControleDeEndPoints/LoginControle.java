@@ -23,7 +23,7 @@ public class LoginControle extends Handle{
             
             lg.setEmailLogin(jsonObject.get("email").getAsString());
             lg.setSenhaLogin((jsonObject.get("senha").getAsString()));
-
+            
             if (!lg.VerificaCamposLogin()) {
                 throw new IOException();
             }

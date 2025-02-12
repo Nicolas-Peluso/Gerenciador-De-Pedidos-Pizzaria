@@ -13,15 +13,55 @@ import com.nicolas.Entities.Pedido;
 import com.nicolas.Entities.Pizza;
 import com.nicolas.Exceptions.CampoVazioException;
 import com.nicolas.Exceptions.ExceptionGenerica;
+import com.nicolas.Exceptions.PagamentoEmDinheiroException;
 import com.nicolas.HttpReq.CaptureMessageAndCode;
 import com.nicolas.Sql.Buscar.BuscarAcompanhamento;
-import com.nicolas.Sql.Buscar.BuscarPedido;
 import com.nicolas.Sql.Buscar.BuscarPizza;
 import com.nicolas.Sql.Inserir.InserirItemPedido;
 import com.nicolas.Sql.Inserir.InserirPedido;
 import com.nicolas.Verificacoes.VerificaCampo;
 
 public class PedidoOp extends InserirPedido{
+
+    /**
+     * funcao calcula o preco total buscando no banco o preco de cada item.
+     * Só deve ser chamanda após a transação ser concluida
+     */
+    public void CalculaValorTotal(){
+        double ValorTotal = 0;
+        BuscarPizza bpz = new BuscarPizza();
+        BuscarAcompanhamento bac = new BuscarAcompanhamento();
+
+        for (Item it : super.getPd().getItens()) {
+            if (it.getTipo().equals("pizza")) {
+                ValorTotal += bpz.BuscarPrecoDaPizzaPorNome(it.getNome());
+            } else {
+                ValorTotal += bac.BuscarPrecoAcompanhamentoPorNome(it.getNome());
+            }
+        }
+
+        if(ValorTotal <= 0){
+            super.getPd().setValorTotal(0.0);
+            return;
+        }
+        super.getPd().setValorTotal(ValorTotal);
+    }
+
+    /**
+     * Calcula o troco baseado no valor do cliente e o valor total.
+     * Só deve ser chamada após o valor total ter sido calculado. 
+     */
+    public void CalculaTroco(){
+        if (super.getPd().isDinheiro() && super.getPd().getValorDoCliente() != 0.0) {
+            double troco = super.getPd().getValorDoCliente() - super.getPd().getValorTotal();
+            if (troco <= 0) {
+                super.getPd().setTroco(0.0);
+            }
+            super.getPd().setTroco(troco);
+        } else {
+            super.getPd().setTroco(0.0);
+        }
+    }
 
     public boolean VerificaCampoPedido(){
         try{
@@ -33,6 +73,10 @@ public class PedidoOp extends InserirPedido{
                 throw new CampoVazioException();
             }
 
+            if(super.getPd().isDinheiro() && super.getPd().getValorDoCliente() == 0.0){
+                throw new PagamentoEmDinheiroException();
+            }
+            
             return true;
         }catch(CampoVazioException e){
             CaptureMessageAndCode.setCodeErro(405);
@@ -41,6 +85,10 @@ public class PedidoOp extends InserirPedido{
         }catch(ExceptionGenerica e){
             CaptureMessageAndCode.setCodeErro(405);
             CaptureMessageAndCode.setMessage(e.getMessage());
+            return false;
+        } catch(PagamentoEmDinheiroException pgE){
+            CaptureMessageAndCode.setCodeErro(405);
+            CaptureMessageAndCode.setMessage(pgE.getMessage());
             return false;
         }
     }
@@ -113,21 +161,21 @@ public class PedidoOp extends InserirPedido{
             ConectionTrasactionPedido.setAutoCommit(false);
 
             if(!cl.Cadastrar(ConectionTrasactionPedido)){
-                throw new SQLException("Erro ao cadastrar cliente");
+                throw new SQLException();
             }
 
             int idPed = super.CadastrarPedido(ConectionTrasactionPedido);
 
             if(idPed == -1){
-                throw new SQLException("Erro ao cadastrar pedido");
+                throw new SQLException();
             }
 
             Pedido.setIdPedido(idPed);
 
             if(!this.InserirItensDoPedido(ConectionTrasactionPedido)){
-                throw new SQLException("Erro ao cadastrar item");
+                throw new SQLException();
             }
-            
+
             ConectionTrasactionPedido.commit();
             return true;
         }catch(SQLException ec){
@@ -140,8 +188,6 @@ public class PedidoOp extends InserirPedido{
                     rollbackEx.printStackTrace();
                 }
             }
-            CaptureMessageAndCode.setMessage(ec.getMessage());
-            CaptureMessageAndCode.setCodeErro(405);
         } finally{
             if(ConectionTrasactionPedido != null){
                 try{
@@ -151,7 +197,6 @@ public class PedidoOp extends InserirPedido{
                 }
             }
         }
-
         return false;
     }
 
@@ -163,6 +208,8 @@ public class PedidoOp extends InserirPedido{
                 inserirItemPedido.setPzId(it.getId());
                 inserirItemPedido.setObs(it.getObs());
                 if(!inserirItemPedido.InserirPizza(Con)){
+                    CaptureMessageAndCode.setMessage("Nao foi possivel encontar esse item no sistema verifique o nome e o tipo do item");
+                    CaptureMessageAndCode.setCodeErro(405);
                     return false;
                 }
             }
@@ -170,6 +217,8 @@ public class PedidoOp extends InserirPedido{
                 inserirItemPedido.setAcomId(it.getId());
                 inserirItemPedido.setObs(it.getObs());
                 if (!inserirItemPedido.InserirAcom(Con)) {
+                    CaptureMessageAndCode.setMessage("Nao foi possivel encontar esse item no sistema verifique o nome e o tipo do item");
+                    CaptureMessageAndCode.setCodeErro(405);
                     return false;
                 }
             }

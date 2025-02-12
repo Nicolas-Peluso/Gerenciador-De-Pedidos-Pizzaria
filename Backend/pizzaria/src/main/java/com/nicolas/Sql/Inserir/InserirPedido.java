@@ -8,6 +8,7 @@ import java.sql.SQLException;
 import com.nicolas.DB.DbConect;
 import com.nicolas.Entities.Cliente;
 import com.nicolas.Entities.Pedido;
+import com.nicolas.Entities.Usuario;
 
 public abstract class InserirPedido extends DbConect{
     private Pedido pd = null;
@@ -23,7 +24,7 @@ public abstract class InserirPedido extends DbConect{
             stm.setBoolean(4, this.getPd().isPix());
             stm.setBoolean(5, this.getPd().isPagamentoConfirmado());
             stm.setInt(6, Cliente.getClienteId());
-            stm.setString(7, this.getPd().getTempoEspera());
+            stm.setString(7, Usuario.getTempoMedioDeDelivery());
             stm.executeUpdate();
 
             ResultSet idPedido = stm.getGeneratedKeys();

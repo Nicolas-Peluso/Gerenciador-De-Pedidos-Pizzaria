@@ -1,5 +1,4 @@
 package com.nicolas.Entities;
-
 import com.nicolas.Exceptions.UsuarioLogadoException;
 import com.nicolas.HttpReq.CaptureMessageAndCode;
 
@@ -14,8 +13,17 @@ public class Usuario {
     private static String telefoneUsr = "";
     private static int UsrId;
     private static boolean Logado = false;
+    private static String TempoMedioDeDelivery = "";
 
-    public Usuario(int id, String nome, String cargo, int limiteSaborPizza, String nomePizzaria, String endereco, String telefone) {
+    public static String getTempoMedioDeDelivery() {
+        return TempoMedioDeDelivery;
+    }
+
+    public static void setTempoMedioDeDelivery(String tempoMedioDeDelivery) {
+        TempoMedioDeDelivery = tempoMedioDeDelivery;
+    }
+
+    public Usuario(int id, String nome, String cargo, int limiteSaborPizza, String nomePizzaria, String endereco, String telefone, String TempoMedioDeDelivery) {
         setUsrId(id);
         setNomeUsr(nome);
         setCargoUsr(cargo);
@@ -23,6 +31,7 @@ public class Usuario {
         setNomePizzariaUsr(nomePizzaria);
         setEnderecoUsr(endereco);
         setTelefoneUsr(telefone);
+        setTempoMedioDeDelivery(TempoMedioDeDelivery);
     }
 
     //Cadastrar Acompanhamento

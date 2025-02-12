@@ -43,6 +43,7 @@ public class CadastroControle extends Handle{
 
             user.setEndereco(json.get("endereco").getAsString());
             user.setTelefone(json.get("telefone").getAsString());
+            user.setTempoMedioDeDelivery(json.get("tempoMedioDelivery").getAsString());
 
             if(!user.VerificaCampos()){
                 throw new IOException();

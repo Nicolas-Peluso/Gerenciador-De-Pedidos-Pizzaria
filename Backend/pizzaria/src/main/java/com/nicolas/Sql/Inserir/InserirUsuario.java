@@ -14,11 +14,12 @@ public abstract class InserirUsuario extends DbConect{
     protected String nomePizzaria = "";
     protected String endereco = "";
     protected String telefone = "";
+    protected String tempoMedioDeDelivery = "";
 
     protected int limiteSaborPizza = 0;
 
     protected boolean CadastrarUsuario() {
-        this.setQuery("INSERT INTO usuario(nome, cargo, limiteSaborPizza, email, senha, nomePizzaria, endereco, telefone) VALUES (? , ? , ?, ?, ?, ?, ?, ?)");
+        this.setQuery("INSERT INTO usuario(nome, cargo, limiteSaborPizza, email, senha, nomePizzaria, endereco, telefone, tempoMedioDelivery) VALUES (? , ? , ?, ?, ?, ?, ?, ?, ?)");
                 try {
                     Connection c = StartConection();
                     PreparedStatement statement = c.prepareStatement(this.getQuery());
@@ -30,15 +31,23 @@ public abstract class InserirUsuario extends DbConect{
                     statement.setString(6, this.getNomePizzaria());
                     statement.setString(7, this.getEndereco());
                     statement.setString(8, this.getTelefone());
+                    statement.setString(9, this.getTempoMedioDeDelivery());
 
                     statement.executeUpdate();
-                    System.out.println("Usuario Cadastrado");
                     StopConection(c);
                     return true;
             } catch (SQLException ex) {
                 System.out.println(ex.getMessage());
             }
         return false;
+    }
+
+    public String getTempoMedioDeDelivery() {
+        return tempoMedioDeDelivery;
+    }
+
+    public void setTempoMedioDeDelivery(String tempoMedioDeDelivery) {
+        this.tempoMedioDeDelivery = tempoMedioDeDelivery;
     }
 
     public String getNomePizzaria() {
