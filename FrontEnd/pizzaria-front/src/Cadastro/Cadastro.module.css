@@ -1,0 +1,11 @@
+.versenha {
+    display: flex;
+    align-content: center;
+    align-self: flex-end;
+    max-width: 100% !important;
+}
+
+.versenha label {
+    margin-right: 4px;
+    cursor: pointer;
+}
