@@ -6,7 +6,7 @@ import com.nicolas.ControleDeEndPoints.CadastraItemControle;
 import com.nicolas.ControleDeEndPoints.CadastroControle;
 import com.nicolas.ControleDeEndPoints.CadastroPedidoControle;
 import com.nicolas.ControleDeEndPoints.LoginControle;
-import com.nicolas.ControleDeEndPoints.Root;
+import com.nicolas.ControleDeEndPoints.GetItens;
 import com.sun.net.httpserver.HttpServer;
 
 public class Server{
@@ -16,7 +16,7 @@ public class Server{
         try{
         HttpServer server = HttpServer.create(new InetSocketAddress(9000), 0);
 
-        server.createContext("/", new Root());
+        server.createContext("/itens", new GetItens());
         server.createContext("/Login", new LoginControle());
         server.createContext("/Cadastro", new CadastroControle());
         server.createContext("/CadastrarItem", new CadastraItemControle());

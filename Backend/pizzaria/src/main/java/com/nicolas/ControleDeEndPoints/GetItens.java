@@ -10,7 +10,7 @@ import com.nicolas.Operacoes.Buscar.items.BuscarItensDoUsuario;
 import com.nicolas.util.returnsJson.ReturnListPedidos;
 import com.sun.net.httpserver.HttpExchange;
 
-public class Root extends Handle{
+public class GetItens extends Handle{
     //
     @Override
     protected void handleRequest(HttpExchange exchange) throws IOException {    

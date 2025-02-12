@@ -19,7 +19,7 @@ public abstract class InserirUsuario extends DbConect{
     protected int limiteSaborPizza = 0;
 
     protected boolean CadastrarUsuario() {
-        this.setQuery("INSERT INTO usuario(nome, cargo, limiteSaborPizza, email, senha, nomePizzaria, endereco, telefone, tempoMedioDelivery) VALUES (? , ? , ?, ?, ?, ?, ?, ?, ?)");
+        this.setQuery("INSERT INTO usuario(nome, cargo, limiteSaborPizza, email, senha, nomePizzaria, endereco, telefone) VALUES (? , ? , ?, ?, ?, ?, ?, ?, ?)");
                 try {
                     Connection c = StartConection();
                     PreparedStatement statement = c.prepareStatement(this.getQuery());
@@ -31,7 +31,6 @@ public abstract class InserirUsuario extends DbConect{
                     statement.setString(6, this.getNomePizzaria());
                     statement.setString(7, this.getEndereco());
                     statement.setString(8, this.getTelefone());
-                    statement.setString(9, this.getTempoMedioDeDelivery());
 
                     statement.executeUpdate();
                     StopConection(c);
