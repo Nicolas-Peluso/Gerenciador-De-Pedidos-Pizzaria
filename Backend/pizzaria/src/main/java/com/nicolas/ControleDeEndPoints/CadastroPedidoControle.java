@@ -57,17 +57,16 @@ public class CadastroPedidoControle extends Handle{
                 throw new IOException();
             }
 
-            pd.ItensPedidoTratamento(jsonO.get("itensPedido").getAsJsonArray());
-
-            if(!cl.Cadastrar()){
+            //verifica se os itens sao validos (tipo)
+            if(!(pd.ItensPedidoTratamento(jsonO.get("itensPedido").getAsJsonArray()))){
                 throw new IOException();
             }
 
-            if(!pd.Cadastrar()){
+            //Se nenhum erro com os campos, tipos de dados etc... Cadastra o pedido completo em uma trasação onde se nao for possivel cadastrar um vai dar erro
+            if(!pd.CadastrarPedidoCompleto(cl)){
+                CaptureMessageAndCode.setMessage("teste");
                 throw new IOException();
             }
-
-            pd.InserirItensDoPedido();
 
             CaptureMessageAndCode.setMessage("Pedido Cadastrado com sucesso");
             CaptureMessageAndCode.setCodeErro(201);

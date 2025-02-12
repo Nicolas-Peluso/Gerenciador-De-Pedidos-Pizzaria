@@ -1,4 +1,8 @@
 package com.nicolas.Operacoes.Cadastro.Pedido;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.SQLException;
+
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
@@ -8,6 +12,7 @@ import com.nicolas.Entities.Item;
 import com.nicolas.Entities.Pedido;
 import com.nicolas.Entities.Pizza;
 import com.nicolas.Exceptions.CampoVazioException;
+import com.nicolas.Exceptions.ExceptionGenerica;
 import com.nicolas.HttpReq.CaptureMessageAndCode;
 import com.nicolas.Sql.Buscar.BuscarAcompanhamento;
 import com.nicolas.Sql.Buscar.BuscarPedido;
@@ -21,7 +26,7 @@ public class PedidoOp extends InserirPedido{
     public boolean VerificaCampoPedido(){
         try{
             if(super.getPd() == null){
-                throw new Exception("Algo deu errado na manipulação tente novamente");
+                throw new ExceptionGenerica();
             }
 
             if(VerificaCampo.CampoVazio(new String[] {super.getPd().getFormaDePagamento()})){
@@ -33,16 +38,28 @@ public class PedidoOp extends InserirPedido{
             CaptureMessageAndCode.setCodeErro(405);
             CaptureMessageAndCode.setMessage(e.getMessage());
             return false;
-        }catch(Exception e){
+        }catch(ExceptionGenerica e){
             CaptureMessageAndCode.setCodeErro(405);
             CaptureMessageAndCode.setMessage(e.getMessage());
             return false;
         }
     }
 
-    public void ItensPedidoTratamento(JsonArray ar){
+    /**
+     * recebe uma array do tipo JsonArray.
+     * adiciona os itens do pedidos em objetos do tipo respectivo.
+     * @param ar
+     */
+    public boolean ItensPedidoTratamento(JsonArray ar){
         Acompanhamento acom = null;
         Pizza pz = null;
+
+        //verifica se a lista de pedidos possue pedidos
+        if(ar.isEmpty()){
+            CaptureMessageAndCode.setMessage("Não é possivel cadastrar u pedido sem os itens");
+            CaptureMessageAndCode.setCodeErro(405);
+            return false;
+        }
 
         for(JsonElement it : ar){
             JsonObject itemObj = it.getAsJsonObject();
@@ -60,7 +77,7 @@ public class PedidoOp extends InserirPedido{
                 int id = bc.BuscarIdPizzaPorNome(nome);
                 pz.setId(id);
                 super.getPd().setItens(pz);
-            } else{
+            } else if(tipoEE.equals("Acompanhamento")){
                 acom = new Acompanhamento();
                 acom.setNome(nome);
                 acom.setTipo(tipoEE);
@@ -69,44 +86,96 @@ public class PedidoOp extends InserirPedido{
                 int idA = bc.BuscarIdAcompanhamentoPorNome(nome);
                 acom.setId(idA);
                 super.getPd().setItens(acom);   
-                System.err.println("nfkns"+acom.getId());
             }
-
+            else{
+                return false;
+            }
             acom = null;
             pz = null;
         }
+        return true;
     }
 
-    public boolean Cadastrar(){
-        boolean cad =  super.CadastrarPedido();
+    //Pedido nao pode existir sem um cliente vise-versa, item nao pode ser cadastrado sem um pedido.
+    //Transação Atomica ou todos as tabelas (Cliente, item, Pedido) são preenchidas ou nenhuma.
+    /**
+     * @param cl
+     * recebe o cliente para usar o seu metodo de cadastro
+     * @return
+     * retorna true se o pedido foi cadastrado com sucesso e false se não
+     */
+    public boolean CadastrarPedidoCompleto(Cliente cl){
+            Connection ConectionTrasactionPedido = null;
+        try{
+            ConectionTrasactionPedido = DriverManager.getConnection(MYSQL_URL);
 
-        if(cad){
-            BuscarPedido ped = new BuscarPedido();
-            int idPed = ped.PedidoId(Cliente.getClienteId());
+            //desabilitar o auto commit
+            ConectionTrasactionPedido.setAutoCommit(false);
+
+            if(!cl.Cadastrar(ConectionTrasactionPedido)){
+                throw new SQLException("Erro ao cadastrar cliente");
+            }
+
+            int idPed = super.CadastrarPedido(ConectionTrasactionPedido);
+
+            if(idPed == -1){
+                throw new SQLException("Erro ao cadastrar pedido");
+            }
+
             Pedido.setIdPedido(idPed);
+
+            if(!this.InserirItensDoPedido(ConectionTrasactionPedido)){
+                throw new SQLException("Erro ao cadastrar item");
+            }
+            
+            ConectionTrasactionPedido.commit();
+            return true;
+        }catch(SQLException ec){
+            ec.printStackTrace();
+            if(ConectionTrasactionPedido != null){
+                try {
+                    ConectionTrasactionPedido.rollback();
+                    return false;
+                } catch (SQLException rollbackEx) {
+                    rollbackEx.printStackTrace();
+                }
+            }
+            CaptureMessageAndCode.setMessage(ec.getMessage());
+            CaptureMessageAndCode.setCodeErro(405);
+        } finally{
+            if(ConectionTrasactionPedido != null){
+                try{
+                    ConectionTrasactionPedido.close();
+                } catch(SQLException d){
+                    d.printStackTrace();
+                }
+            }
         }
 
-        return cad;
+        return false;
     }
 
-    public void InserirItensDoPedido(){
+    public boolean InserirItensDoPedido(Connection Con){
         InserirItemPedido inserirItemPedido = new InserirItemPedido();
 
         for(Item it : super.getPd().getItens()){
             if(it.getTipo().equals("pizza")){
                 inserirItemPedido.setPzId(it.getId());
                 inserirItemPedido.setObs(it.getObs());
-                inserirItemPedido.InserirPizza();
+                if(!inserirItemPedido.InserirPizza(Con)){
+                    return false;
+                }
             }
             else{
                 inserirItemPedido.setAcomId(it.getId());
                 inserirItemPedido.setObs(it.getObs());
-                inserirItemPedido.InserirAcom();
+                if (!inserirItemPedido.InserirAcom(Con)) {
+                    return false;
+                }
             }
-
             inserirItemPedido.setAcomId(0);
             inserirItemPedido.setPzId(0);
         }
-
+        return true;
     }
 }

@@ -12,9 +12,9 @@ public class InserirItemPedido extends DbConect{
     private int AcomId = 0;
     private String obs = "";
     
-    public boolean InserirAcom(){
+    public boolean InserirAcom(Connection ExternalConectionTrasaction){
         try{
-            Connection cn = StartConection();
+            Connection cn = ExternalConectionTrasaction;
             PreparedStatement stm = cn.prepareStatement("INSERT INTO item(obs, idPedido, IdAcom) VALUES (?, ?, ?)");
             stm.setString(1, this.getObs());
             stm.setInt(2, Pedido.getIdPedido());
@@ -29,9 +29,9 @@ public class InserirItemPedido extends DbConect{
         }
     }
 
-    public boolean InserirPizza() {
+    public boolean InserirPizza(Connection ExternalConectionTrasaction) {
         try {
-            Connection cn = StartConection();
+            Connection cn = ExternalConectionTrasaction;
             PreparedStatement stm = cn.prepareStatement("INSERT INTO item(obs, idPedido, IdPizza) VALUES (?, ?, ?)");
             stm.setString(1, this.getObs());
             stm.setInt(2, Pedido.getIdPedido());

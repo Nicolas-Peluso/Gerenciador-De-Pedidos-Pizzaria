@@ -2,6 +2,7 @@ package com.nicolas.Sql.Inserir;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 
 import com.nicolas.DB.DbConect;
@@ -11,10 +12,11 @@ import com.nicolas.Entities.Usuario;
 public abstract class InserirCliente extends DbConect{
     private Cliente cliente = null;
     
-    public boolean CadastrarCliente(){
+    public int CadastrarCliente(Connection ExternalConectionTrasaction){
         try {
-            Connection cn = StartConection();
-            PreparedStatement sta = cn.prepareStatement("INSERT INTO cliente(nome, numeroResidencia, obs, nomeRua, aptoNumero, bairro, IdUsuario) VALUES(?, ? , ? , ?, ?, ?, ?)");
+            Connection cn = ExternalConectionTrasaction;
+            PreparedStatement sta = cn.prepareStatement("INSERT INTO cliente(nome, numeroResidencia, obs, nomeRua, aptoNumero, bairro, IdUsuario) VALUES(?, ? , ? , ?, ?, ?, ?)", 
+                    PreparedStatement.RETURN_GENERATED_KEYS);
             sta.setString(1, this.getCliente().getNome());
             sta.setInt(2, this.getCliente().getNumeroResidencia());
             sta.setString(3, this.getCliente().getObs());
@@ -23,10 +25,14 @@ public abstract class InserirCliente extends DbConect{
             sta.setString(6, this.getCliente().getBairro());
             sta.setInt(7, Usuario.getUsrId());
             sta.executeUpdate();
-            return true;
+            ResultSet keys = sta.getGeneratedKeys();
+            if(keys.next()){    
+                return keys.getInt(1);
+            }
+            return -1;
         } catch (SQLException e) {
             e.printStackTrace();
-            return false;
+            return -1;
         }
     }
     

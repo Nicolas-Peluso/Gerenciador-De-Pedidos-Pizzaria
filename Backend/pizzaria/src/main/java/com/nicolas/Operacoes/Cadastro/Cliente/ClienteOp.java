@@ -1,9 +1,11 @@
 package com.nicolas.Operacoes.Cadastro.Cliente;
+import java.sql.Connection;
+
 import com.nicolas.Entities.Cliente;
 import com.nicolas.Exceptions.CampoVazioException;
+import com.nicolas.Exceptions.ExceptionGenerica;
 import com.nicolas.Exceptions.UsuarioLogadoException;
 import com.nicolas.HttpReq.CaptureMessageAndCode;
-import com.nicolas.Sql.Buscar.ClienteBusca;
 import com.nicolas.Sql.Inserir.InserirCliente;
 import com.nicolas.Verificacoes.VerificaCampo;
 
@@ -38,23 +40,16 @@ public class ClienteOp extends InserirCliente{
         }
     }
 
-    public boolean Cadastrar(){
+    public boolean Cadastrar(Connection con){
         try {
-             if(!super.CadastrarCliente()){
-                throw new Exception("Erro Na hora de cadastrar o cliente tente novamente");
+            int id = super.CadastrarCliente(con);
+             if(id == -1){
+                throw new ExceptionGenerica();
             }
             
-            ClienteBusca cb = new ClienteBusca();
-            cb.setNome(super.getCliente().getNome());
-            int id = cb.ClienteId();
-
-            if(id == -1){
-                throw new Exception("Erro Na hora de cadastrar o cliente tente novamente");
-            }
-        
             Cliente.setClienteId(id);
             return true;
-        } catch (Exception e) {
+        } catch (ExceptionGenerica e) {
             CaptureMessageAndCode.setCodeErro(405);
             CaptureMessageAndCode.setMessage(e.getMessage());
             return false;
