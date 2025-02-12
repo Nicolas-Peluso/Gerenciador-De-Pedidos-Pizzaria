@@ -13,7 +13,8 @@ public abstract class Handle extends CaptureMessageAndCode implements HttpHandle
             exchange.getResponseHeaders().add("Access-Control-Allow-Origin", "*");
             exchange.getResponseHeaders().add("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS");
             exchange.getResponseHeaders().add("Access-Control-Allow-Headers", "Content-Type, Authorization");
-
+            
+            exchange.getResponseHeaders().add("Content-Type", "application/json");
             if ("OPTIONS".equals(exchange.getRequestMethod())) {
                 exchange.sendResponseHeaders(201, -1);
                 return;

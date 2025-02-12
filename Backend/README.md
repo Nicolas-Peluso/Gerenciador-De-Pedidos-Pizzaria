@@ -4,13 +4,41 @@ Versão do java: 23.0.1.
 Versão do maven: 3.8.7.
 
 Endpoints:
-/
+/getItens
 /Login
 /Cadastro
 /CadastroItem
 /CadastroPedio
 
-/ -> rota root retorna uma lista de pedidos, se o usuario estiver logado.
+/getItens -> retorna um json com todos os itens (pizzas e acompanhamentos) cadastrados na conta do usuario.
+{
+    "itens": [
+        {
+            "obsAcomp": "",
+            "obs": "300ml",
+            "nome": "Coca Cola Lata",
+            "preco": 7.0,
+            "tipo": "teste",
+            "Id": 10
+        },
+        {
+            "sabor": "calabresa com rodelas de tomate",
+            "obs": "",
+            "nome": "Toscana",
+            "preco": 70.0,
+            "tipo": "Calzone",
+            "Id": 18
+        },
+        {
+            "sabor": "queijo muçarela com fatias de tomate",
+            "obs": "",
+            "nome": "Muçarela",
+            "preco": 70.0,
+            "tipo": "pizza",
+            "Id": 19
+        }
+    ]
+}
 
 /Login POST -> recebe um json:
 {

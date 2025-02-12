@@ -3,8 +3,12 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 
 import com.nicolas.DB.DbConect;
+import com.nicolas.Entities.Item;
+import com.nicolas.Entities.Pizza;
+import com.nicolas.Entities.Usuario;
 
 public class BuscarPizza extends DbConect{
 
@@ -31,6 +35,41 @@ public class BuscarPizza extends DbConect{
             }
         }
         return -1;
+    }
+
+    public Pizza BuscarTodaPizza(ArrayList<Item> iArrayList) {
+        Connection cn = null;
+        try {
+            cn = StartConection();
+            PreparedStatement stm = cn.prepareStatement("SELECT * FROM pizza WHERE IdUsuario = ?");
+            stm.setInt(1, Usuario.getUsrId());
+            ResultSet rs = stm.executeQuery();
+
+            while(rs.next()) {
+                Pizza pz = new Pizza();
+                pz.setNome(rs.getString("nome"));
+                pz.setPreco(rs.getDouble("Preco"));
+                pz.setSabor(rs.getString("Sabor"));
+                pz.setId(rs.getInt("IdPizza"));
+                pz.setTipo(rs.getString("tipo"));
+
+                iArrayList.add(pz);
+                pz = null;
+            }
+
+        } catch (SQLException exc) {
+            exc.printStackTrace();
+            return null;
+        } finally {
+            if (cn != null) {
+                try {
+                    StopConection(cn);
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+        return null;
     }
 
     public double BuscarPrecoDaPizzaPorNome(String nome){

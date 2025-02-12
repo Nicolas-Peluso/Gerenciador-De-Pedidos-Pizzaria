@@ -16,7 +16,7 @@ public abstract class InserirCliente extends DbConect{
         try {
             Connection cn = ExternalConectionTrasaction;
             PreparedStatement sta = cn.prepareStatement("INSERT INTO cliente(nome, numeroResidencia, obs, nomeRua, aptoNumero, bairro, IdUsuario) VALUES(?, ? , ? , ?, ?, ?, ?)", 
-                    PreparedStatement.RETURN_GENERATED_KEYS);
+                    PreparedStatement.RETURN_GENERATED_KEYS);        
             sta.setString(1, this.getCliente().getNome());
             sta.setInt(2, this.getCliente().getNumeroResidencia());
             sta.setString(3, this.getCliente().getObs());
