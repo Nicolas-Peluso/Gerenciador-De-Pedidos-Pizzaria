@@ -1,7 +1,6 @@
 .containerEntrarPage {
     display: grid;
     grid-template-columns: 1fr 1fr;
-    grid-template-rows: auto;
     align-items: center;
 }
 
@@ -15,6 +14,7 @@
     display: flex;
     justify-content: flex-end;
     grid-column: 1;
+    height: 100%;
 }
 
 .containerForm{
