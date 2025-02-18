@@ -1,0 +1,21 @@
+form{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.containerCheck{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+}
+
+label{
+    margin: 5px;
+}
+
+input[type="checkbox"]{
+    width: 20px;
+    margin-right: 10px;
+}
