@@ -32,3 +32,16 @@ export async function Cadastrar(obj) {
     }
     return true;
 }
+
+export async function BuscarItens(fitro) {
+    try {
+        const response = await fetch(url + "itens/"+fitro,{
+            method: 'GET',
+        });
+
+        const result = await response.json();
+        return result;
+    } catch (Exception) {
+        console.log(Exception)
+    }
+}

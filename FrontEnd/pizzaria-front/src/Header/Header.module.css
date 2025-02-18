@@ -25,3 +25,14 @@
 .optionsBtn ul li{
     margin: 0px 5px;
 }
+
+.optionsBtn ul li img{
+    width: 20px;
+    margin-left: 5px;
+}
+
+.optionsBtn ul .btnSair button{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}

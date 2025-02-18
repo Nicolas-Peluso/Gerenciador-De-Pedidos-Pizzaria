@@ -3,6 +3,7 @@ import style from "./Login.module.css";
 import Input from "../input/Input";
 import { EntrarPage } from "../Entrar/Entrar";
 import { Global } from "../Context/GlobalContext";
+import { useNavigate } from "react-router";
 
 export default function Login(){
     const [verSenha, setVerSenha] = useState(false);
@@ -12,6 +13,9 @@ export default function Login(){
 
     const { HandleClickBtn, setLoading, loading, setMessage} = useContext(EntrarPage);
     const { MidLogin } = useContext(Global);
+
+    const navigateTo = useNavigate();
+
     return(
             <form onChange={e => {setMessage(""); setLoading(false)}}>
             <Input type={"email"} placheholder={"Email"} name={"email"} required onChange={e => { setEmail(e.target.value); setEmailElement(e); e.target.style.borderColor = "black"; }} value={email}/>
@@ -20,7 +24,6 @@ export default function Login(){
                     <input type="checkbox" name="verSenha" id="verSenha" onChange={() => setVerSenha(!verSenha)} />
                 </div>
             <Input type={verSenha ? "text" : "password"} placheholder={"Senha"} name={"senha"} required onChange={e => setSenha(e.target.value)} value={senha} />
-
                 <button className={style.btnLogin} style={{color: loading ? "grey" : "black"}} disabled={loading} onClick={
                         async (e) => {
                             e.preventDefault();
@@ -30,20 +33,18 @@ export default function Login(){
                             
                             if (!res){
                                 setMessage("Verifique as informações de login");
-                            }else{
+                            }else
                                 try{
-                                    const req = await MidLogin(obj);
-                                    if (req.Message !== undefined && req.Message.length !== 0){
+                                    let req = await MidLogin(obj);
+                                    if(!req.ok){
+                                        req = await req.json();
                                         setMessage(req.Message);
+                                        throw new Error();
                                     }
-                                    else{
-
-                                    }
+                                    navigateTo("/dashboard");  
                                 } catch(e){
-                                    console.log(e);
+                                    
                                 }
-                                console.log("login");
-                            }
                 }}>Login</button>
             </form>
     );

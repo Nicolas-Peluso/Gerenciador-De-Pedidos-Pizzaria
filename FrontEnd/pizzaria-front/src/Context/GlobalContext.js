@@ -1,7 +1,6 @@
 import { createContext, useState } from "react";
 import { LoginFunc } from "../services/Api";
 
-
 export const Global = createContext();
 
 export default function GlobalConte({children}){      
@@ -15,11 +14,12 @@ export default function GlobalConte({children}){
         else {
             setLogin(true);
         }
-        return res.json();
+
+        return res;
     }
 
     return(
-        <Global.Provider value={{ isLogin, MidLogin}}>
+        <Global.Provider value={{ isLogin, MidLogin, setLogin }}>
             {children}
         </Global.Provider>
     )

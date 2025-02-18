@@ -13,7 +13,6 @@ export default function Cadastro(){
 
     const [nome, setNome] = useState("");
     const [cargo, setCargo] = useState("");
-    const [limiteSabor, setLimiteSabor] = useState(0);
     const [email, setEmail] = useState("");
     const [cep, setCep] = useState("");
     const [emailElement, setEmailElement] = useState();
@@ -76,23 +75,13 @@ export default function Cadastro(){
                 }
             }/>
 
-            <Input type={"text"} name={"cargo"} Value={cargo} placheholder={"Cargo"} required onChange={
-                e => {
-                    setCargo(e.target.value);
-                }
-            } />
-
-            <Input type={"number"} Value={limiteSabor} name={"limiteSabor"} placheholder={"limiteDeSabor"} required min="0" max="5" onChange={
-                e => {
-                    if (e.target.value > 5 || e.target.value < 0){
-                        e.target.style.borderColor = "red";
-                    }else{
-                        e.target.style.borderColor = "black";
-                        setLimiteSabor(e.target.value);
-                }
-                }
-            }/>
-            <p>Voce pode alterar essa informação depois</p>
+            <section className={style.containerCargoLimite}>
+                <Input type={"text"} name={"cargo"} Value={cargo} placheholder={"Cargo"} required onChange={
+                    e => {
+                        setCargo(e.target.value);
+                    }
+                } />
+            </section>
             
             <Input type={"email"} Value={email} name={"email"} placheholder={"Email"} required onChange={e => { setEmail(e.target.value); setEmailElement(e); e.target.style.borderColor = "black"}} />
             
@@ -103,8 +92,8 @@ export default function Cadastro(){
             
             <Input type={verSenha ? "text" : "password"} Value={senha} name={"senha"} placheholder={"Senha"} required onChange={e => {ValidaSenha(e);setSenhaElement(e); e.target.style.borderColor = "black"}}/>
             
-            {passReg ? <p style={{color: "red"}}>Senha deve ter mais de 8 digitos e menos de 16<br /> uma letra e um Numero</p> : null}
-            
+            {passReg ? <p style={{color: "red"}}>Senha deve ter mais de 8 digitos <br /> menos de 16<br /> uma letra e um Numero</p> : null}
+
             <Input type={verSenha ? "text" : "password"} name={"senha2"} placheholder={"Confirmar Senha"} required onChange={
                     e => {
                         if(e.target.value !== senha){
@@ -122,7 +111,7 @@ export default function Cadastro(){
 
             <Input type={"text"} Value={cep} name={"cep"} placheholder={"Cep Do Restaurante"} disabled={loading} required onChange={ e => BuscarCep(e)}/>
             
-            {cepReg ? <p>Cep nao deve conter o traço (-) apenas numeros</p> : null}
+            {cepReg ? <p>Cep nao deve conter o traço (-) <br /> apenas numeros</p> : null}
 
             <section className={style.enderecoCont}>
                 <Input type={"number"} name={"numeroCasa"} placheholder={"Numero"} required min={0} onChange={e => setNumeroCasa(e.target.value)} />
@@ -140,7 +129,7 @@ export default function Cadastro(){
                     e.preventDefault();
                     let endereco = nomeRua + ", " + bairro + ", " + numeroCasa;
 
-                    let obj = { nome, email, senha, endereco, telefone, cargo, nomePizzaria, limiteSabor};
+                    let obj = { nome, email, senha, endereco, telefone, cargo, nomePizzaria};
                     let res = false;
                     
                     res = HandleClickBtn(emailElement, obj);
@@ -154,9 +143,11 @@ export default function Cadastro(){
                     } else{ 
                         try{
                             const req = await Cadastrar(obj);
-                            console.log(req);
+                            if(req.Message !== undefined){
+                                setMessage(req.Message);
+                            }
                         }catch(ex){
-                            console.log(ex);
+                            setMessage("Algo deu errado durante a manipulação dos dados");
                         }
                     }
             }}>Cadastrar</button>
