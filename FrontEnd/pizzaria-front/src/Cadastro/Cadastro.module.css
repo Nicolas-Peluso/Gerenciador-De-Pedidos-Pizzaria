@@ -9,3 +9,12 @@
     margin-right: 4px;
     cursor: pointer;
 }
+
+.enderecoCont input[name="numeroCasa"]{
+    width: 100px;
+    margin: 5px;
+}
+
+.enderecoCont input[name="nomeRua"]{
+    width: 190px;
+}

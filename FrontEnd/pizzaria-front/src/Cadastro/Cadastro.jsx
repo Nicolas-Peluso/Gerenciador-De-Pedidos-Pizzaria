@@ -1,32 +1,34 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import Input from "../input/Input";
 import style from "./Cadastro.module.css";
 import { Cadastrar } from "../services/Api";
 import { findCep } from "../services/CepApi";
+import { EntrarPage } from "../Entrar/Entrar";
 
 export default function Cadastro(){
 
     const [verSenha, setVerSenha] = useState();
     const [senha, setSenha] = useState();
+    const [senhaElement, setSenhaElement] = useState();
+
     const [nome, setNome] = useState("");
     const [cargo, setCargo] = useState("");
     const [limiteSabor, setLimiteSabor] = useState(0);
     const [email, setEmail] = useState("");
     const [cep, setCep] = useState("");
-
+    const [emailElement, setEmailElement] = useState();
+    
     const [nomeRua, setNomeRua] = useState("");
     const [numeroCasa, setNumeroCasa] = useState("");
     const [bairro, setBairro] = useState("");
     const [nomePizzaria, setNomePizzaria] = useState("");
     const [telefone, setTelefone] = useState("");
 
-
     const [difetentPass, setDifetentPass] = useState(false);
     const [passReg, setPassReg] = useState(false);
     const [cepReg, setCepReg] = useState(false);
-    const [message, setMessage] = useState("");
     
-    const [loading, setLoading] = useState(false);
+    const { loading, setLoading, HandleClickBtn, setMessage } = useContext(EntrarPage);
 
     async function BuscarCep(e){
             setBairro("");
@@ -63,27 +65,11 @@ export default function Cadastro(){
                 e.target.style.borderColor = "black";
                 setPassReg(false);
             }
+
     }
 
-    async function HandleClickBtn(e) {
-            e.preventDefault();
-            setLoading(true);
-            let endereco = nomeRua + ", " + bairro + ", " + numeroCasa;
-            if (!(nome.length !== 0 && endereco.length !== 0 && cargo.length !== 0 && email.length !== 0 && senha.length !== 0 && nomePizzaria.length !== 0 && telefone.length !== 0)){
-                setLoading(false);
-                return false;
-            }
-            try {
-                let result = await Cadastrar(nome, cargo, limiteSabor, email, senha, nomePizzaria, endereco, telefone);
-                setMessage(result.Message);
-                return true;
-            } finally {
-                setLoading(false);
-            }
-        }
-
     return(
-        <form onChange={e => setMessage("")}>
+        <form onChange={e => {setMessage(""); setLoading(false)}}>
             <Input type={"text"} name={"nome"} placheholder={"Nome"} Value={nome} required onChange={
                 e => {
                     setNome(e.target.value);
@@ -108,20 +94,20 @@ export default function Cadastro(){
             }/>
             <p>Voce pode alterar essa informação depois</p>
             
-            <Input type={"email"} Value={email} name={"email"} placheholder={"Email"} required onChange={ e => setEmail(e.target.value)} />
+            <Input type={"email"} Value={email} name={"email"} placheholder={"Email"} required onChange={e => { setEmail(e.target.value); setEmailElement(e); e.target.style.borderColor = "black"}} />
             
             <div className={style.versenha}>
                 <label htmlFor="verSenha" id="labelVerSenha">mostrar senha</label>
-                <input type="checkbox" name="verSenha" id="verSenha" onChange={() => setVerSenha(!verSenha)} />
+                <input type="checkbox" name="verSenha" id="verSenha" onChange={e => setVerSenha(!verSenha)} />
             </div>
             
-            <Input type={verSenha ? "text" : "password"} Value={senha} name={"senha"} placheholder={"Senha"} required onChange={ e => ValidaSenha(e) }/>
+            <Input type={verSenha ? "text" : "password"} Value={senha} name={"senha"} placheholder={"Senha"} required onChange={e => {ValidaSenha(e);setSenhaElement(e); e.target.style.borderColor = "black"}}/>
             
-            {passReg ? <p>Senha deve ter mais de 8 digitos e menos de 16<br /> uma letra e um Numero</p> : null}
+            {passReg ? <p style={{color: "red"}}>Senha deve ter mais de 8 digitos e menos de 16<br /> uma letra e um Numero</p> : null}
             
             <Input type={verSenha ? "text" : "password"} name={"senha2"} placheholder={"Confirmar Senha"} required onChange={
                     e => {
-                        if(e.target.value != senha){
+                        if(e.target.value !== senha){
                             e.target.style.borderColor = "red"
                             setDifetentPass(true);
                         }
@@ -138,9 +124,10 @@ export default function Cadastro(){
             
             {cepReg ? <p>Cep nao deve conter o traço (-) apenas numeros</p> : null}
 
-            <Input type={"text"} name={"nomeRua"} placheholder={"Nome Rua"} required value={nomeRua}/>
-            
-            <Input type={"number"} name={"numeroCasa"} placheholder={"Numero da Loja"} required min={0} onChange={e => setNumeroCasa(e.target.value)}/>
+            <section className={style.enderecoCont}>
+                <Input type={"number"} name={"numeroCasa"} placheholder={"Numero"} required min={0} onChange={e => setNumeroCasa(e.target.value)} />
+                <Input type={"text"} name={"nomeRua"} placheholder={"Nome da Rua"} required value={nomeRua}/>
+            </section>
             
             <Input type={"text"} name={"bairro"} placheholder={"Nome do bairro"} required value={bairro}/>
 
@@ -149,15 +136,30 @@ export default function Cadastro(){
             <Input type={"text"} name={"nomePizzaria"} placheholder={"Nome da loja"} required onChange={e => setNomePizzaria(e.target.value)} />
 
             <button style={{ color: loading ? "gray" : "black" }} disabled={loading} onClick={
-                e =>  {
-                let r = HandleClickBtn(e).then(e => {
-                    if (!e) {
-                        setMessage("Nenhum campo pode estar vazio!")
-                    }
-                });
-            }}>Cadastrar</button>
+                async e =>  {
+                    e.preventDefault();
+                    let endereco = nomeRua + ", " + bairro + ", " + numeroCasa;
 
-            {message.length != 0 ? <p>{message}</p> : null}
+                    let obj = { nome, email, senha, endereco, telefone, cargo, nomePizzaria, limiteSabor};
+                    let res = false;
+                    
+                    res = HandleClickBtn(emailElement, obj);
+
+                    if (!res) {
+                        setLoading(true);
+                        setMessage("Verifique os campos e tente novamente!")
+                    } else if (difetentPass === true || passReg === true){
+                        senhaElement.target.style.borderColor = "red";
+                        setMessage("Verifique a senha, e tente novamente");
+                    } else{ 
+                        try{
+                            const req = await Cadastrar(obj);
+                            console.log(req);
+                        }catch(ex){
+                            console.log(ex);
+                        }
+                    }
+            }}>Cadastrar</button>
         </form>
     );
 }

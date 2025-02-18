@@ -1,8 +1,6 @@
 const urls = "http://viacep.com.br/ws/";
 
-export async function findCep(cep){
-    console.log(urls + cep + "/json");
-    
+export async function findCep(cep){    
     try{
         const response = await fetch(urls + cep + "/json", {
             method: "GET"

@@ -2,7 +2,21 @@
     display: grid;
     grid-template-columns: 1fr 1fr;
     align-items: center;
+    margin-bottom: 50px;
 }
+
+.cadastrolink{
+    border: none !important;
+    padding: 0px !important;
+    width: auto !important;
+    height: auto !important;
+    margin: 5px 0px;
+}
+
+.cadastrolink span{
+    border-bottom: 1px solid rgb(255, 174, 0);
+}
+
 
 .containerImage img{
     height: 700px;
@@ -36,6 +50,6 @@ h1{
 p{
     font-size: medium;
     text-align: center;
-    margin: 10px 0px;
+    margin: 0px 10px 0px 0px;
     font-weight: lighter;
 }

@@ -1,0 +1,27 @@
+.container{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    height: 100px;
+    margin-bottom: 70px;
+}
+
+.container .optionsBtn{
+    margin-right: 10px;
+}
+
+.containerIcon img{
+    margin-left: 10px;
+    width:70px;
+    max-width: 100%;
+}
+
+.optionsBtn ul{
+    display: flex;
+    flex-direction: row;
+}
+
+.optionsBtn ul li{
+    margin: 0px 5px;
+}

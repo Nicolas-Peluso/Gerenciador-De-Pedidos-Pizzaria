@@ -1,4 +1,4 @@
-import React, { useState, createContext, useContext } from "react";
+import React, { useState, createContext } from "react";
 import Login from "../Login/Login";
 import imagePizzaBanner from "../assets/Images/pablo-pacheco-D3Mag4BKqns-unsplash.jpg";
 import style from "./Entrar.module.css";
@@ -7,7 +7,34 @@ import Cadastro from "../Cadastro/Cadastro";
 export const EntrarPage = createContext();
 
 export default function Entrar(){
-    const [login, setLogin] = useState(true);
+    const [loginGoTo, setLoginGoTo] = useState(true);
+    const [loading, setLoading] = useState(false);
+    const [message, setMessage] = useState("");
+
+    function validarEmail(email, e) {
+        let regEmail = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;        
+        if (!regEmail.test(email)) {
+            e.target.style.borderColor = "red";
+            return e;
+        }
+        return true;
+    }
+
+    function HandleClickBtn(e, obj) {
+                setLoading(true);
+
+                for(const prop in obj){
+                    if (obj[prop] === undefined || obj[prop] === "" || obj[prop] === null){
+                        return false;
+                    }
+                }
+    
+                if (validarEmail(obj["email"], e) !== true){
+                    return false;
+                };
+
+                return true;
+            }
 
     return(
         <section className={style.containerEntrarPage}>
@@ -16,19 +43,21 @@ export default function Entrar(){
             </section>
             <section className={style.containerForm}>
                 <h1>The Pizza Manager</h1>
-                <EntrarPage.Provider value={{login, setLogin}}>
-                    {login ? <Login /> : <Cadastro />}
+                <EntrarPage.Provider value={{HandleClickBtn, setLoading, loading, setMessage}}>
+                    {loginGoTo ? <Login /> : <Cadastro />}
                 </EntrarPage.Provider> 
+                {message.length !== 0 ? <p style={{ color: "red" }}>{message}</p> : null}
                 <p>
                     {
-                        login ? "Nao possui conta? " : "ja possui conta? "
+                        loginGoTo ? "Nao possui conta? " : "ja possui conta? "
                     }
                 </p>
                 <p>{
-                    login ? <a className={style.cadastrolink} onClick={(e) => {e.preventDefault();setLogin(false);}}>Cadastre-se</a> :
-
-                    <a className={style.cadastrolink} onClick={(e) => { e.preventDefault(); setLogin(true); }}>Login</a>}</p>
+                    loginGoTo ? <button className={style.cadastrolink} onClick={(e) => { e.preventDefault(); setLoginGoTo(false);}}><span>Cadastre-se</span></button> :
+                        <button className={style.cadastrolink} onClick={(e) => { e.preventDefault(); setLoginGoTo(true); }}><span>Login</span></button>}
+                </p>
             </section>
+                
         </section>
     )
 }
