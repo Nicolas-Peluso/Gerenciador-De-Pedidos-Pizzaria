@@ -52,7 +52,6 @@ public class CadastraItemControle extends Handle{
                 if(!item.ValidarCamposItem(new String[] {NomePizza, SaborPìzza}, PrecoPizza)){
                     throw new IOException();
                 }
-                
                 if(!item.inserirPizza()){
                     CaptureMessageAndCode.setCodeErro(404);
                     CaptureMessageAndCode.setMessage("Algo deu errado na manipulação");

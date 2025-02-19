@@ -9,14 +9,23 @@ import com.nicolas.util.returnsJson.ReturnListPedidos;
 
 public class BuscarItensDoUsuario {
 
-    public void BuscarItens(){
+    public void BuscarItens(String filtro){
         ArrayList<Item> it = new ArrayList<>();
-
-        BuscarAcompanhamento Ba = new BuscarAcompanhamento();
-        BuscarPizza Bpz = new BuscarPizza();
         
-        Ba.BuscarTodoAcompanhamento(it);
-        Bpz.BuscarTodaPizza(it);
+        if(filtro.equals("pizza")){
+            BuscarPizza Bpz = new BuscarPizza();
+            Bpz.BuscarTodaPizza(it);
+        }
+        else if(filtro.equals("acompanhamento")){
+            BuscarAcompanhamento Ba = new BuscarAcompanhamento();
+            Ba.BuscarTodoAcompanhamento(it);
+        }else{
+            BuscarPizza Bpz = new BuscarPizza();
+            BuscarAcompanhamento Ba = new BuscarAcompanhamento();
+            
+            Ba.BuscarTodoAcompanhamento(it); 
+            Bpz.BuscarTodaPizza(it);
+        }
 
         ReturnListPedidos.setItems(it);
     }

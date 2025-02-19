@@ -16,8 +16,9 @@ public class BuscarPizza extends DbConect{
         Connection cn = null;
         try{
             cn = StartConection();
-            PreparedStatement stm = cn.prepareStatement("SELECT IdPizza FROM pizza WHERE nome = ?");
+            PreparedStatement stm = cn.prepareStatement("SELECT IdPizza FROM pizza WHERE nome = ? AND IdUsuario = ?");
             stm.setString(1, nome);
+            stm.setInt(2, Usuario.getUsrId());
             ResultSet rs = stm.executeQuery();
             if(rs.next()){
                 return rs.getInt("IdPizza");
@@ -76,8 +77,9 @@ public class BuscarPizza extends DbConect{
         Connection cn = null;
         try {
             cn = StartConection();
-            PreparedStatement stm = cn.prepareStatement("SELECT Preco FROM pizza WHERE nome = ?");
+            PreparedStatement stm = cn.prepareStatement("SELECT Preco FROM pizza WHERE nome = ? AND IdUsuario = ?");
             stm.setString(1, nome);
+            stm.setInt(2, Usuario.getUsrId());
             ResultSet rs = stm.executeQuery();
             if (rs.next()) {
                 return rs.getDouble("Preco");
@@ -96,5 +98,5 @@ public class BuscarPizza extends DbConect{
         }
         return -1;
     }
-    
+
 }

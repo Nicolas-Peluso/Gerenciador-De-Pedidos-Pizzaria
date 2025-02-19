@@ -17,8 +17,9 @@ public class BuscarAcompanhamento extends DbConect{
         Connection cn = null;
         try{
             cn = StartConection();
-            PreparedStatement stm = cn.prepareStatement("SELECT idAcom FROM Acompanhamento WHERE nome = ?");
+            PreparedStatement stm = cn.prepareStatement("SELECT idAcom FROM Acompanhamento WHERE nome = ? AND IdUsuario = ?");
             stm.setString(1, nome);
+            stm.setInt(2, Usuario.getUsrId());
             ResultSet rs = stm.executeQuery();
             if(rs.next()){
                 return rs.getInt("idAcom");

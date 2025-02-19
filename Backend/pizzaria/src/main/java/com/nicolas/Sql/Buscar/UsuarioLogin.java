@@ -41,7 +41,7 @@ public abstract class UsuarioLogin extends DbConect{
             exc.printStackTrace();
         } catch(LoginEmailSenhaException logEx){
             CaptureMessageAndCode.setMessage(logEx.getMessage());
-            CaptureMessageAndCode.setCodeErro(200);
+            CaptureMessageAndCode.setCodeErro(405);
         }
         return false;
     }

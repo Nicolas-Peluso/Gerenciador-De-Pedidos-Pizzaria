@@ -15,15 +15,12 @@ import com.nicolas.Verificacoes.VerificaCampo;
 public final class CadastraUsuario extends InserirUsuario{
 
     public boolean VerificaCampos(){
-        // verificação dos campos
         try {
             if(VerificaCampo.CampoVazio(new String[]{super.getNome(), super.getCargo(), super.getEmail(), super.getSenha(), super.getNomePizzaria(), super.getEndereco()
             ,super.getTelefone()})){
                 throw new CampoVazioException();
             }
-            if (super.getLimiteSaborPizza() < 1) {
-                throw new Exception("O limite de sabores em uma pizza nao pode ser 0 deve ser 1 ou mais");
-            }
+            
             try {
                 if (!Email.VerificarEmail(email)) {
                     throw new EmailException();

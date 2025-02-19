@@ -25,17 +25,6 @@ public class CadastroControle extends Handle{
             user.setNome(json.get("nome").getAsString());
             user.setCargo(json.get("cargo").getAsString());
             
-            try{
-                if (!json.get("limiteSaborPizza").isJsonPrimitive() || !json.get("limiteSaborPizza").getAsJsonPrimitive().isNumber()) {
-                    throw new IllegalArgumentException("Campo 'limiteSaborPizza' deve ser um número.");
-                }
-                user.setLimiteSaborPizza(json.get("limiteSaborPizza").getAsInt());
-            }catch(IllegalArgumentException nex){
-                CaptureMessageAndCode.setMessage("limiteSaborPizza deve ser um numero INTEIRO");
-                CaptureMessageAndCode.setCodeErro(405);
-                throw new IOException();
-            }
-
             user.setEmail(json.get("email").getAsString());
             user.setSenha(json.get("senha").getAsString());
 

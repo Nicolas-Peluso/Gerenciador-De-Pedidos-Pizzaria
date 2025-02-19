@@ -16,11 +16,13 @@ public class GetItens extends Handle{
     protected void handleRequest(HttpExchange exchange) throws IOException {    
         if("GET".equals(exchange.getRequestMethod())){
             if (!Usuario.isLogado()) {
-                    throw new IOException();
+                throw new IOException();
             }
-
+            
+            String filtro = exchange.getRequestURI().toString().substring(7);
+            
             BuscarItensDoUsuario buscarItensDoUsuario = new BuscarItensDoUsuario();
-            buscarItensDoUsuario.BuscarItens();
+            buscarItensDoUsuario.BuscarItens(filtro);
             
             exchange.sendResponseHeaders(200, ReturnListPedidos.returnitensCadastradosLista().getBytes().length);
             OutputStream os = exchange.getResponseBody();

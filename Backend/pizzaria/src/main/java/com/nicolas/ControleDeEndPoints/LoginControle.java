@@ -35,11 +35,9 @@ public class LoginControle extends Handle{
 
             lg.UserLogado();
 
-            CaptureMessageAndCode.setMessage("Login realizado com sucesso");
             CaptureMessageAndCode.setCodeErro(201);
-            exchange.sendResponseHeaders(getCodeErro(), getMessage().getBytes().length);
+            exchange.sendResponseHeaders(getCodeErro(), -1);
             OutputStream os = exchange.getResponseBody();
-            os.write(getMessage().getBytes());
             os.close();
         }
         else {
