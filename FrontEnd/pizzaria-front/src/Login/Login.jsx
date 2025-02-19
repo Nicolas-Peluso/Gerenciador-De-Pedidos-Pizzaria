@@ -1,4 +1,4 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import style from "./Login.module.css";
 import Input from "../input/Input";
 import { EntrarPage } from "../Entrar/Entrar";
@@ -11,10 +11,14 @@ export default function Login(){
     const [emailElement, setEmailElement] = useState();
     const [senha, setSenha] = useState("");
 
-    const { HandleClickBtn, setLoading, loading, setMessage} = useContext(EntrarPage);
-    const { MidLogin } = useContext(Global);
+    const { HandleClickBtn} = useContext(EntrarPage);
+    const { MidLogin, setLoading, loading, setMessage } = useContext(Global);
 
     const navigateTo = useNavigate();
+
+    useEffect(() => {
+        setMessage("");
+    }, [])
 
     return(
             <form onChange={e => {setMessage(""); setLoading(false)}}>

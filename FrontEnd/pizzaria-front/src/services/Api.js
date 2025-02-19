@@ -16,7 +16,6 @@ export async function LoginFunc(obj){
     }
 }
 
-
 export async function Cadastrar(obj) {
     try {
         const response = await fetch(url + "Cadastro", {
@@ -25,8 +24,7 @@ export async function Cadastrar(obj) {
                 'Content-Type': 'application/json',
             },
             body: JSON.stringify(obj)});
-        const result = await response.json();
-        return result;
+        return response;
     } catch (Exception) {
         console.log(Exception);
     }
@@ -43,5 +41,38 @@ export async function BuscarItens(fitro) {
         return result;
     } catch (Exception) {
         console.log(Exception)
+    }
+}
+
+export async function CadastrarItem(obj) {
+    try {
+        const response = await fetch(url + "CadastrarItem", {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(obj)
+        });
+        let res = await response.json();
+        return res;
+
+    } catch (Exception) {
+        console.log(Exception);
+    }
+}
+
+export async function DeletarItem(obj){
+    try {
+        const request = await fetch(url + "DeletarItem", {
+            method: "DELETE",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify(obj)
+        });
+        const result = await request.json();
+        console.log(result);
+    } catch (error) {
+        console.log(error)
     }
 }

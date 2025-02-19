@@ -1,9 +1,11 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import Input from "../input/Input";
 import style from "./Cadastro.module.css";
-import { Cadastrar } from "../services/Api";
+import { Cadastrar, LoginFunc } from "../services/Api";
 import { findCep } from "../services/CepApi";
 import { EntrarPage } from "../Entrar/Entrar";
+import { Global } from "../Context/GlobalContext";
+import { useNavigate } from "react-router";
 
 export default function Cadastro(){
 
@@ -27,7 +29,14 @@ export default function Cadastro(){
     const [passReg, setPassReg] = useState(false);
     const [cepReg, setCepReg] = useState(false);
     
-    const { loading, setLoading, HandleClickBtn, setMessage } = useContext(EntrarPage);
+    const { HandleClickBtn } = useContext(EntrarPage);
+    const {loading, setLoading, setMessage, MidLogin} = useContext(Global);
+
+    const navigaeTo = useNavigate();
+
+    useEffect(() => {
+            setMessage("");
+    }, [])  
 
     async function BuscarCep(e){
             setBairro("");
@@ -143,8 +152,18 @@ export default function Cadastro(){
                     } else{ 
                         try{
                             const req = await Cadastrar(obj);
-                            if(req.Message !== undefined){
-                                setMessage(req.Message);
+                            if(!req.ok){
+                                const result = await req.json();
+                                setMessage(result.Message);
+                            }
+                            else{
+                                let reslogin = await MidLogin({email, senha});
+                                if(!reslogin.ok){
+                                    let res = await reslogin.json();
+                                    setMessage(res.Message);
+                                    throw new Error();
+                                }
+                                navigaeTo("/dashboard");
                             }
                         }catch(ex){
                             setMessage("Algo deu errado durante a manipulação dos dados");

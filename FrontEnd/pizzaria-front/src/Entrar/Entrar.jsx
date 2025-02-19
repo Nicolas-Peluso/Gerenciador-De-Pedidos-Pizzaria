@@ -1,15 +1,15 @@
-import React, { useState, createContext } from "react";
+import React, { useState, createContext, useContext } from "react";
 import Login from "../Login/Login";
 import imagePizzaBanner from "../assets/Images/pablo-pacheco-D3Mag4BKqns-unsplash.jpg";
 import style from "./Entrar.module.css";
 import Cadastro from "../Cadastro/Cadastro";
+import { Global } from "../Context/GlobalContext";
 
 export const EntrarPage = createContext();
 
 export default function Entrar(){
     const [loginGoTo, setLoginGoTo] = useState(true);
-    const [loading, setLoading] = useState(false);
-    const [message, setMessage] = useState("");
+    const {message, setLoading} = useContext(Global);
 
     function validarEmail(email, e) {
         let regEmail = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;        
@@ -43,7 +43,7 @@ export default function Entrar(){
             </section>
             <section className={style.containerForm}>
                 <h1>The Pizza Manager</h1>
-                <EntrarPage.Provider value={{HandleClickBtn, setLoading, loading, setMessage}}>
+                <EntrarPage.Provider value={{HandleClickBtn}}>
                     {loginGoTo ? <Login /> : <Cadastro />}
                 </EntrarPage.Provider> 
                 {message.length !== 0 ? <p style={{ color: "red" }}>{message}</p> : null}

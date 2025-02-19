@@ -5,7 +5,7 @@ import { Link, Outlet, useNavigate } from 'react-router-dom';
 
 
 function DashBoard() {
-    const { isLogin } = useContext(Global);
+    const { isLogin, message, setMessage} = useContext(Global);
     let navigate = useNavigate();
 
     useEffect(() => {
@@ -16,6 +16,10 @@ function DashBoard() {
 
     useEffect(() => {
         navigate("/dashboard/list");
+    }, [])
+
+    useEffect(() => {
+        setMessage("");
     }, [])
 
     if(!isLogin) return <></>;
@@ -39,6 +43,11 @@ function DashBoard() {
                         </ul>
                     </section>
                     <Outlet />
+
+                    <p>{
+                            message !== undefined ? message : null
+                        }
+                    </p>
                 </section>  
     );
 }

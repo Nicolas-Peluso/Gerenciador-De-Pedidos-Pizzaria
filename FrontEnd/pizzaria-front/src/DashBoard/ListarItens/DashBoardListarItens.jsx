@@ -1,22 +1,45 @@
-import {React, useState, useEffect} from 'react';
+import {React, useState, useEffect, useContext} from 'react';
 import Input from '../../input/Input';
 import { BuscarItens } from '../../services/Api';
 import style from './DashBoardListarItens.module.css'
+import { DeletarItem } from '../../services/Api';
+import { Global } from '../../Context/GlobalContext';
 
 function DashBoardListarItens() {
     const [filtro, setFiltro] = useState("");
     const [data, setData] = useState([]);
-    
-    useEffect(() => {
-        async function s() {
-            let da = await BuscarItens(filtro);
-            setData(da.itens);
-        }
-        s();
-    }, [filtro])
+    const {setMessage} = useContext(Global);
 
+    useEffect(() => {
+            setMessage("");
+        }, [])
+
+    useEffect(() => {
+            AttData();
+    }, [filtro])
+    
     function setCheckBoxUm(valor) {
         setFiltro(valor === filtro ? null : valor);
+    }
+
+    async function AttData() {
+        let da = await BuscarItens(filtro);
+        setData(da.itens);
+    }
+
+    async function handleClick(nome, att){
+        let tipo = "";
+
+        if(att !== undefined){
+            tipo = "pizza"
+        } else{
+            tipo = "Acompanhamento"
+        }
+
+        let obj = {"tipo": tipo, "nome": nome};
+
+        await DeletarItem(obj);
+        AttData();
     }
 
     return (
@@ -47,7 +70,7 @@ function DashBoardListarItens() {
 
                 <tbody>
                     {
-                        data.map((iten) => (
+                        (data || []).map((iten) => (
                             <tr key={iten.id}>
                                 <td>
                                     {iten.nome}
@@ -65,7 +88,7 @@ function DashBoardListarItens() {
                                     <button>editar</button>
                                 </td>
                                 <td>
-                                    <button>excluir</button>
+                                    <button onClick={() => handleClick(iten.nome, iten.sabor)}>excluir</button>
                                 </td>
                             </tr>
                         ))
