@@ -12,6 +12,7 @@ import com.nicolas.Entities.Usuario;
 import com.nicolas.HttpReq.CaptureMessageAndCode;
 import com.nicolas.HttpReq.Handle;
 import com.nicolas.Operacoes.Cadastro.Produto.CadastrarItem;
+import com.nicolas.util.TokenFromHeader.GetTokenFromHeader;
 import com.sun.net.httpserver.HttpExchange;
 
 public class CadastraItemControle extends Handle{
@@ -29,7 +30,13 @@ public class CadastraItemControle extends Handle{
                 throw new IOException();
             }
 
-            if(!Usuario.isLogado()){
+            String token = GetTokenFromHeader.GetToken(exchange);
+            
+            if(token.isEmpty()){
+                throw new IOException();
+            }
+
+            if(!Usuario.isLogado(token)){
                 throw new IOException();
             }
 

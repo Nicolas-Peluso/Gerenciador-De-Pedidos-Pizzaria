@@ -11,6 +11,7 @@ import com.nicolas.HttpReq.CaptureMessageAndCode;
 import com.nicolas.HttpReq.Handle;
 import com.nicolas.Operacoes.Deletar.Acompanhamento.DeletarAcomOp;
 import com.nicolas.Operacoes.Deletar.pizza.DeletarPizzaOp;
+import com.nicolas.util.TokenFromHeader.GetTokenFromHeader;
 import com.sun.net.httpserver.HttpExchange;
 
 public class DeleteItemControle extends Handle{
@@ -18,14 +19,20 @@ public class DeleteItemControle extends Handle{
     @Override
     protected void handleRequest(HttpExchange exchange) throws IOException {
            if("DELETE".equals(exchange.getRequestMethod())){
-                if(!Usuario.isLogado()){
-                    throw new IOException();
-                }
+                 String token = GetTokenFromHeader.GetToken(exchange);
+            
+            if(token.isEmpty()){
+                throw new IOException();
+            }
+
+            if(!Usuario.isLogado(token)){
+                throw new IOException();
+            }
 
                 Gson j = new Gson();
                 InputStreamReader inputStreamReader = new InputStreamReader(exchange.getRequestBody(), "UTF-8");
                 JsonObject jObject = j.fromJson(inputStreamReader, JsonObject.class);
-                
+
                 String tipo = jObject.get("tipo").getAsString();
 
                 if(!tipo.equals("pizza") && !tipo.equals("Acompanhamento")){

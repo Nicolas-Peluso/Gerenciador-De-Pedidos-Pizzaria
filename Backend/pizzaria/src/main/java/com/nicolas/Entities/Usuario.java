@@ -1,6 +1,7 @@
 package com.nicolas.Entities;
 import com.nicolas.Exceptions.UsuarioLogadoException;
 import com.nicolas.HttpReq.CaptureMessageAndCode;
+import com.nicolas.util.jwt.jwtAutCom;
 
 public class Usuario {
     
@@ -14,6 +15,15 @@ public class Usuario {
     private static int UsrId;
     private static boolean Logado = false;
     private static String TempoMedioDeDelivery = "";
+    private static String token = "";
+
+    public static String getToken() {
+        return token;
+    }
+
+    public static void setToken(String token) {
+        Usuario.token = token;
+    }
 
     public static String getTempoMedioDeDelivery() {
         return TempoMedioDeDelivery;
@@ -23,7 +33,7 @@ public class Usuario {
         TempoMedioDeDelivery = tempoMedioDeDelivery;
     }
 
-    public Usuario(int id, String nome, String cargo, int limiteSaborPizza, String nomePizzaria, String endereco, String telefone, String TempoMedioDeDelivery) {
+    public Usuario(int id, String nome, String cargo, int limiteSaborPizza, String nomePizzaria, String endereco, String telefone, String TempoMedioDeDelivery, String token_) {
         setUsrId(id);
         setNomeUsr(nome);
         setCargoUsr(cargo);
@@ -32,6 +42,7 @@ public class Usuario {
         setEnderecoUsr(endereco);
         setTelefoneUsr(telefone);
         setTempoMedioDeDelivery(TempoMedioDeDelivery);
+        setToken(token_);
     }
 
     //Cadastrar Acompanhamento
@@ -39,11 +50,11 @@ public class Usuario {
     
     /**
      * @return
-     * retorna true se usuario estiver logado
+     * retorna true se token for valido
      */
-    public static boolean isLogado() {
+    public static boolean isLogado(String jwtToken) {
         try{
-            if(Logado == false){
+            if(!jwtAutCom.Auteticar(jwtToken)){
                 throw new UsuarioLogadoException();
             }
         }catch(UsuarioLogadoException useL){
@@ -52,7 +63,7 @@ public class Usuario {
             return false;
         }
 
-        return Logado;
+        return true;
     }
 
     public static void setLogado(boolean logado) {

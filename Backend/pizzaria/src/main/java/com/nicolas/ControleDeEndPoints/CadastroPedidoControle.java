@@ -10,6 +10,7 @@ import com.nicolas.Entities.Pedido;
 import com.nicolas.Entities.Usuario;
 import com.nicolas.HttpReq.CaptureMessageAndCode;
 import com.nicolas.HttpReq.Handle;
+import com.nicolas.util.TokenFromHeader.GetTokenFromHeader;
 import com.sun.net.httpserver.HttpExchange;
 
 public class CadastroPedidoControle extends Handle{
@@ -18,10 +19,16 @@ public class CadastroPedidoControle extends Handle{
     protected void handleRequest(HttpExchange exchange) throws IOException {
         if("POST".equals(exchange.getRequestMethod())){
             
-            if(!Usuario.isLogado()){
+            String token = GetTokenFromHeader.GetToken(exchange);
+            
+            if(token.isEmpty()){
                 throw new IOException();
             }
-        
+            
+            if(!Usuario.isLogado(token)){
+                throw new IOException();
+            }
+
             Gson g = new Gson();
             InputStreamReader inputStreamReader = new InputStreamReader(exchange.getRequestBody(), "UTF-8");
             JsonObject jsonO = g.fromJson(inputStreamReader, JsonObject.class);

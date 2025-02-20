@@ -6,9 +6,11 @@ import java.io.OutputStream;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
+import com.nicolas.Entities.Usuario;
 import com.nicolas.HttpReq.CaptureMessageAndCode;
 import com.nicolas.HttpReq.Handle;
 import com.nicolas.Operacoes.Login.Login;
+import com.nicolas.util.returnsJson.ReturnTokenLogin;
 import com.sun.net.httpserver.HttpExchange;
 
 public class LoginControle extends Handle{
@@ -35,11 +37,14 @@ public class LoginControle extends Handle{
 
             lg.UserLogado();
 
+            ReturnTokenLogin.setTokenUsr(Usuario.getToken());
             CaptureMessageAndCode.setCodeErro(201);
-            exchange.sendResponseHeaders(getCodeErro(), -1);
+            exchange.sendResponseHeaders(getCodeErro(), ReturnTokenLogin.setTokenUsrRet(Usuario.getToken()).getBytes().length);
             OutputStream os = exchange.getResponseBody();
+            os.write(ReturnTokenLogin.setTokenUsrRet(Usuario.getToken()).getBytes());
             os.close();
         }
+
         else {
             CaptureMessageAndCode.setCodeErro(405);
             CaptureMessageAndCode.setMessage("requisições para esse endpoint deve ser POST");

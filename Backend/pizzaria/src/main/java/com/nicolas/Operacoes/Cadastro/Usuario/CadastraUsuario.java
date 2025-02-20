@@ -11,6 +11,7 @@ import com.nicolas.Sql.Inserir.InserirUsuario;
 import com.nicolas.Verificacoes.Email;
 import com.nicolas.Verificacoes.Senha;
 import com.nicolas.Verificacoes.VerificaCampo;
+import com.nicolas.util.jwt.jwtAutCom;
 
 public final class CadastraUsuario extends InserirUsuario{
 
@@ -66,6 +67,7 @@ public final class CadastraUsuario extends InserirUsuario{
                 if(Pnome.BuscarPizzariaNome(nomePizzaria)){
                     throw new PizzzariaJaCadastradaException();
                 }
+                super.setToken(jwtAutCom.gerar());
                 return CadastrarUsuario();
             } catch (PizzzariaJaCadastradaException exz) {
                 CaptureMessageAndCode.setMessage(exz.getMessage());

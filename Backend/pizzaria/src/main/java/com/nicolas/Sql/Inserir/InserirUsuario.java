@@ -15,11 +15,12 @@ public abstract class InserirUsuario extends DbConect{
     protected String endereco = "";
     protected String telefone = "";
     protected String tempoMedioDeDelivery = "";
+    protected String token = "";
 
     protected int limiteSaborPizza = 0;
 
     protected boolean CadastrarUsuario() {
-        this.setQuery("INSERT INTO usuario(nome, cargo, email, senha, nomePizzaria, endereco, telefone) VALUES (? , ? , ?, ?, ?, ?, ?)");
+        this.setQuery("INSERT INTO usuario(nome, cargo, email, senha, nomePizzaria, endereco, telefone, tokenSession) VALUES (?, ? , ? , ?, ?, ?, ?, ?)");
                 try {
                     Connection c = StartConection();
                     PreparedStatement statement = c.prepareStatement(this.getQuery());
@@ -30,6 +31,7 @@ public abstract class InserirUsuario extends DbConect{
                     statement.setString(5, this.getNomePizzaria());
                     statement.setString(6, this.getEndereco());
                     statement.setString(7, this.getTelefone());
+                    statement.setString(8, this.getToken());
 
                     statement.executeUpdate();
                     StopConection(c);
@@ -38,6 +40,14 @@ public abstract class InserirUsuario extends DbConect{
                 System.out.println(ex.getMessage());
             }
         return false;
+    }
+
+    public String getToken() {
+        return token;
+    }
+
+    public void setToken(String token) {
+        this.token = token;
     }
 
     public String getTempoMedioDeDelivery() {
