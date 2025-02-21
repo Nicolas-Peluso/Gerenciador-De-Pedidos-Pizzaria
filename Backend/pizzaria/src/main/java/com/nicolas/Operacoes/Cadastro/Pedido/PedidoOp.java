@@ -11,6 +11,7 @@ import com.nicolas.Entities.Cliente;
 import com.nicolas.Entities.Item;
 import com.nicolas.Entities.Pedido;
 import com.nicolas.Entities.Pizza;
+import com.nicolas.Entities.Usuario;
 import com.nicolas.Exceptions.CampoVazioException;
 import com.nicolas.Exceptions.ExceptionGenerica;
 import com.nicolas.Exceptions.PagamentoEmDinheiroException;
@@ -148,12 +149,15 @@ public class PedidoOp extends InserirPedido{
     //Transação Atomica ou todos as tabelas (Cliente, item, Pedido) são preenchidas ou nenhuma.
     /**
      * @param cl
-     * recebe o cliente para usar o seu metodo de cadastro
+     *           recebe o cliente para usar o seu metodo de cadastro
+     * @param token
+     *      recebe o token de sessão ja validado para buscar o idDoUsuario ao qual o pedido sera cadastrado
      * @return
-     * retorna true se o pedido foi cadastrado com sucesso e false se não
+     *         retorna true se o pedido foi cadastrado com sucesso e false se não
      */
-    public boolean CadastrarPedidoCompleto(Cliente cl){
+    public boolean CadastrarPedidoCompleto(Cliente cl, String token){
             Connection ConectionTrasactionPedido = null;
+            Usuario.setUsrId(token);
         try{
             ConectionTrasactionPedido = DriverManager.getConnection(MYSQL_URL);
 

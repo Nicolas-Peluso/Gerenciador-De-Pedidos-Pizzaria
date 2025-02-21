@@ -31,7 +31,6 @@ public class CadastraItemControle extends Handle{
             }
 
             String token = GetTokenFromHeader.GetToken(exchange);
-            
             if(token.isEmpty()){
                 throw new IOException();
             }
@@ -39,7 +38,7 @@ public class CadastraItemControle extends Handle{
             if(!Usuario.isLogado(token)){
                 throw new IOException();
             }
-
+            
             if(jsonObject.get("tipo").getAsString().equals("pizza")){
                 CadastrarItem item = new CadastrarItem();
                 Pizza pizza = new Pizza();
@@ -59,6 +58,9 @@ public class CadastraItemControle extends Handle{
                 if(!item.ValidarCamposItem(new String[] {NomePizza, SaborPìzza}, PrecoPizza)){
                     throw new IOException();
                 }
+                
+                item.SetId(token);
+
                 if(!item.inserirPizza()){
                     CaptureMessageAndCode.setCodeErro(404);
                     CaptureMessageAndCode.setMessage("Algo deu errado na manipulação");
@@ -92,6 +94,8 @@ public class CadastraItemControle extends Handle{
             if (!item.ValidarCamposItem(new String[] { nomeAcom, ObsAcom }, PrecoAcom)) {
                 throw new IOException();
             }
+
+            item.SetId(token);
 
             if (!item.inserirAcompanhamento()) {
                 CaptureMessageAndCode.setCodeErro(404);

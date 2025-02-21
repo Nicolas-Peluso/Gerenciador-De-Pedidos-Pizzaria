@@ -4,7 +4,6 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 
-import com.nicolas.Constantes.prop;
 import com.nicolas.DB.DbConect;
 import com.nicolas.Entities.Usuario;
 

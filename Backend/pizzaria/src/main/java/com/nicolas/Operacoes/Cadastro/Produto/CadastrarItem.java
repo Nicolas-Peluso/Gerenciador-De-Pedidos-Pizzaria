@@ -1,4 +1,5 @@
 package com.nicolas.Operacoes.Cadastro.Produto;
+import com.nicolas.Entities.Usuario;
 import com.nicolas.Exceptions.AcompanhamentoExisteException;
 import com.nicolas.Exceptions.CampoVazioException;
 import com.nicolas.Exceptions.SaborDePizzaJaExisteException;
@@ -61,6 +62,15 @@ public class CadastrarItem extends InserirItem{
             return false;
         }
         return true;
+    }
+
+    /**
+     *busca o id do usuario que possui o mesmo token 
+     * @param token
+     *recebe o token de sessão ja validado
+     */
+    public void SetId(String token){
+        Usuario.setUsrId(token);
     }
 
 }

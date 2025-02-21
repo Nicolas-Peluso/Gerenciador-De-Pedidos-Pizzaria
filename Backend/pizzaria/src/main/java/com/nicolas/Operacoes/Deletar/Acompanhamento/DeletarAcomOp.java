@@ -1,5 +1,6 @@
 package com.nicolas.Operacoes.Deletar.Acompanhamento;
 
+import com.nicolas.Entities.Usuario;
 import com.nicolas.Exceptions.AcomNaoExisteException;
 import com.nicolas.HttpReq.CaptureMessageAndCode;
 import com.nicolas.Sql.Buscar.BuscarAcompanhamento;
@@ -26,8 +27,9 @@ public class DeletarAcomOp extends DeletarAcompanhamento{
         return true;
     }
 
-    public boolean DeletarAcomOP() {
-
+    public boolean DeletarAcomOP(String token) {
+        Usuario.setUsrId(token);
+        
         try {
             BuscarAcompanhamento bcA = new BuscarAcompanhamento();
 

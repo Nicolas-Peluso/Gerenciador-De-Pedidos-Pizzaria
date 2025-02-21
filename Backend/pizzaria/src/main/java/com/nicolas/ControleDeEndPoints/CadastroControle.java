@@ -8,7 +8,6 @@ import com.google.gson.JsonObject;
 import com.nicolas.HttpReq.CaptureMessageAndCode;
 import com.nicolas.HttpReq.Handle;
 import com.nicolas.Operacoes.Cadastro.Usuario.CadastraUsuario;
-import com.nicolas.Operacoes.Login.Login;
 import com.sun.net.httpserver.HttpExchange;
 
 public class CadastroControle extends Handle{
@@ -42,13 +41,6 @@ public class CadastroControle extends Handle{
                 throw new IOException();
             }
 
-            //Realiza login Após o cadastro ser realizado com sucesso.
-            Login logCad = new Login();
-            logCad.setEmailLogin(json.get("email").getAsString());
-            logCad.setSenhaLogin(json.get("senha").getAsString());
-            logCad.Login();
-            logCad.UserLogado();
-
             CaptureMessageAndCode.setMessage("Cadastro realizado com sucesso! Seja bem viado");
             CaptureMessageAndCode.setCodeErro(201);
             exchange.sendResponseHeaders(getCodeErro(), getMessage().getBytes().length);
@@ -56,8 +48,7 @@ public class CadastroControle extends Handle{
             os.write(CaptureMessageAndCode.getMessage().getBytes());
             os.close();
         }
-            
-            
+        
         else{
             CaptureMessageAndCode.setCodeErro(405);
             CaptureMessageAndCode.setMessage("requisições para esse endpoint deve ser POST");

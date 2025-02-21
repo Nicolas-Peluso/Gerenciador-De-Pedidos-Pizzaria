@@ -21,13 +21,13 @@ public class DeleteItemControle extends Handle{
            if("DELETE".equals(exchange.getRequestMethod())){
                  String token = GetTokenFromHeader.GetToken(exchange);
             
-            if(token.isEmpty()){
-                throw new IOException();
-            }
+                if(token.isEmpty()){
+                    throw new IOException();
+                }
 
-            if(!Usuario.isLogado(token)){
-                throw new IOException();
-            }
+                if(!Usuario.isLogado(token)){
+                    throw new IOException();
+                }
 
                 Gson j = new Gson();
                 InputStreamReader inputStreamReader = new InputStreamReader(exchange.getRequestBody(), "UTF-8");
@@ -53,7 +53,7 @@ public class DeleteItemControle extends Handle{
                         throw new IOException();
                     }
 
-                    boolean delRes = delpzOp.DeletarPzOP();
+                    boolean delRes = delpzOp.DeletarPzOP(token);
 
                     if(!delRes){
                         throw new IOException();
@@ -78,7 +78,7 @@ public class DeleteItemControle extends Handle{
                     throw new IOException();
                 }
 
-                boolean delRes = delAcomOp.DeletarAcomOP();
+                boolean delRes = delAcomOp.DeletarAcomOP(token);
 
                 if (!delRes) {
                     throw new IOException();

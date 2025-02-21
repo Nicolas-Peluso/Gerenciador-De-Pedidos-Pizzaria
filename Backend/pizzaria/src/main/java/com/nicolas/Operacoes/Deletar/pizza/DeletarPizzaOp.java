@@ -1,4 +1,5 @@
 package com.nicolas.Operacoes.Deletar.pizza;
+import com.nicolas.Entities.Usuario;
 import com.nicolas.Exceptions.PizzaNaoExisteException;
 import com.nicolas.HttpReq.CaptureMessageAndCode;
 import com.nicolas.Sql.Buscar.BuscarPizza;
@@ -34,9 +35,10 @@ public class DeletarPizzaOp extends DeletarPizza{
         return true;
     }
 
-    public boolean DeletarPzOP(){
+    public boolean DeletarPzOP(String token){
 
         try{
+            Usuario.setUsrId(token);
             BuscarPizza bcpz = new BuscarPizza();
 
             int id = bcpz.BuscarIdPizzaPorNome(getNomePZ());

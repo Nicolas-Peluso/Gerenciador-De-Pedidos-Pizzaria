@@ -59,7 +59,7 @@ public final class CadastraUsuario extends InserirUsuario{
     public boolean Cadastro(){
          try{
             VerificarUsuario vUsuario = new VerificarUsuario();
-            if(vUsuario.UsuarioExiste(email)){
+            if(vUsuario.UsuarioExiste(super.getEmail())){
                 throw new UsuarioJaExisteException();
             }
             try{
@@ -67,7 +67,7 @@ public final class CadastraUsuario extends InserirUsuario{
                 if(Pnome.BuscarPizzariaNome(nomePizzaria)){
                     throw new PizzzariaJaCadastradaException();
                 }
-                super.setToken(jwtAutCom.gerar());
+                super.setToken(jwtAutCom.gerar(super.getNomePizzaria()));
                 return CadastrarUsuario();
             } catch (PizzzariaJaCadastradaException exz) {
                 CaptureMessageAndCode.setMessage(exz.getMessage());

@@ -35,8 +35,6 @@ public class LoginControle extends Handle{
                 throw new IOException();
             }
 
-            lg.UserLogado();
-
             ReturnTokenLogin.setTokenUsr(Usuario.getToken());
             CaptureMessageAndCode.setCodeErro(201);
             exchange.sendResponseHeaders(getCodeErro(), ReturnTokenLogin.setTokenUsrRet(Usuario.getToken()).getBytes().length);

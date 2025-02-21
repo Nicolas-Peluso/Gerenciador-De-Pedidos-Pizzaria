@@ -16,7 +16,7 @@ public abstract class UsuarioLogin extends DbConect{
     public boolean Login() {
         try{
             Connection con = StartConection();
-            PreparedStatement statement = con.prepareStatement("SELECT nome, cargo, limiteSaborPizza, IdUsuario, nomePizzaria, endereco,"
+            PreparedStatement statement = con.prepareStatement("SELECT nome, cargo, limiteSaborPizza, nomePizzaria, endereco,"
             +"telefone, tempoMedioDelivery, tokenSession FROM usuario WHERE email = ? AND senha = ?");
             statement.setString(1, this.getEmailLogin());
             statement.setString(2, this.getSenhaLogin());
@@ -26,7 +26,6 @@ public abstract class UsuarioLogin extends DbConect{
                 }
 
             new Usuario(
-                resultSet.getInt("IdUsuario"),
                 resultSet.getString("nome"),
                 resultSet.getString("cargo"),
                 resultSet.getInt("limiteSaborPizza"),

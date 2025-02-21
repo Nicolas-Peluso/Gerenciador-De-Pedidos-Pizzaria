@@ -7,7 +7,7 @@ import java.sql.ResultSet;
 
 import com.nicolas.DB.DbConect;
 
-public abstract class PizzariaNome extends DbConect{
+public class PizzariaNome extends DbConect{
     //Uma unica Pizzaria por nome
     public boolean BuscarPizzariaNome(String PizzariaNome){
         try{
@@ -24,6 +24,24 @@ public abstract class PizzariaNome extends DbConect{
             ex.printStackTrace();
         }
         return true;
+    }
+
+    public String BuscarPizzariaNomePorToken(String token) {
+        try {
+            Connection cn = StartConection();
+            PreparedStatement statement = cn
+                    .prepareStatement("SELECT nomePizzaria FROM usuario WHERE tokenSession = ?");
+            statement.setString(1, token);
+            ResultSet resultSet = statement.executeQuery();
+            if (!resultSet.next()) {
+                StopConection(cn);
+                return "";
+            }
+            return resultSet.getString("nomePizzaria");
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+        }
+        return "";
     }
 
 }

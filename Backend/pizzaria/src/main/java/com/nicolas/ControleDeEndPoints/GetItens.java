@@ -29,8 +29,8 @@ public class GetItens extends Handle{
             String filtro = exchange.getRequestURI().toString().substring(7);
 
             BuscarItensDoUsuario buscarItensDoUsuario = new BuscarItensDoUsuario();
-            buscarItensDoUsuario.BuscarItens(filtro);
-            
+            buscarItensDoUsuario.BuscarItens(filtro, token);
+
             exchange.sendResponseHeaders(200, ReturnListPedidos.returnitensCadastradosLista().getBytes().length);
             OutputStream os = exchange.getResponseBody();
             os.write(ReturnListPedidos.returnitensCadastradosLista().getBytes());
@@ -41,4 +41,4 @@ public class GetItens extends Handle{
             throw new IOException();
         }        
     }
-}
+} 

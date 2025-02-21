@@ -70,7 +70,7 @@ public class CadastroPedidoControle extends Handle{
             }
 
             //Se nenhum erro com os campos, tipos de dados etc... Cadastra o pedido completo em uma trasação onde se nao for possivel cadastrar um vai dar erro
-            if(!pd.CadastrarPedidoCompleto(cl)){
+            if(!pd.CadastrarPedidoCompleto(cl, token)){
                 throw new IOException();
             }
 

@@ -1,6 +1,9 @@
 package com.nicolas.Entities;
-import com.nicolas.Exceptions.UsuarioLogadoException;
+
+import com.nicolas.Exceptions.TokenInvalidoException;
 import com.nicolas.HttpReq.CaptureMessageAndCode;
+import com.nicolas.Sql.Buscar.BuscarUserId;
+import com.nicolas.Sql.Buscar.PizzariaNome;
 import com.nicolas.util.jwt.jwtAutCom;
 
 public class Usuario {
@@ -13,7 +16,6 @@ public class Usuario {
     private static String enderecoUsr = "";
     private static String telefoneUsr = "";
     private static int UsrId;
-    private static boolean Logado = false;
     private static String TempoMedioDeDelivery = "";
     private static String token = "";
 
@@ -33,8 +35,7 @@ public class Usuario {
         TempoMedioDeDelivery = tempoMedioDeDelivery;
     }
 
-    public Usuario(int id, String nome, String cargo, int limiteSaborPizza, String nomePizzaria, String endereco, String telefone, String TempoMedioDeDelivery, String token_) {
-        setUsrId(id);
+    public Usuario(String nome, String cargo, int limiteSaborPizza, String nomePizzaria, String endereco, String telefone, String TempoMedioDeDelivery, String token_) {
         setNomeUsr(nome);
         setCargoUsr(cargo);
         setLimiteSaborPizza(limiteSaborPizza);
@@ -45,29 +46,30 @@ public class Usuario {
         setToken(token_);
     }
 
-    //Cadastrar Acompanhamento
-
-    
     /**
      * @return
      * retorna true se token for valido
      */
     public static boolean isLogado(String jwtToken) {
         try{
-            if(!jwtAutCom.Auteticar(jwtToken)){
-                throw new UsuarioLogadoException();
+            PizzariaNome pzC = new PizzariaNome();
+            String pznome = pzC.BuscarPizzariaNomePorToken(jwtToken);
+            
+            if(pznome.isEmpty()){
+                throw new TokenInvalidoException();
             }
-        }catch(UsuarioLogadoException useL){
-            CaptureMessageAndCode.setMessage(useL.getMessage());
+
+            if(!jwtAutCom.Auteticar(jwtToken, pznome)){
+                throw new TokenInvalidoException();
+            }
+
+        } catch(TokenInvalidoException e){
+            CaptureMessageAndCode.setMessage(e.getMessage());
             CaptureMessageAndCode.setCodeErro(405);
             return false;
         }
 
         return true;
-    }
-
-    public static void setLogado(boolean logado) {
-        Logado = logado;
     }
 
     public void CadastrarAcompanhamento() {
@@ -86,8 +88,21 @@ public class Usuario {
         return UsrId;
     }
 
-    public static void setUsrId(int usrId) {
-        UsrId = usrId;
+    /**
+     * seta o id do usuario apartir do token recebido
+     * @param token
+     * token de sessão ja validado, (não faz validacao de token)
+     */
+    public static void setUsrId(String token) {
+        try {
+            BuscarUserId iduserBuscarUserId = new BuscarUserId();
+            int id = iduserBuscarUserId.BuscarId(token);
+            UsrId = id;
+        } catch (Exception e) {
+            CaptureMessageAndCode.setMessage(e.getMessage());
+            CaptureMessageAndCode.setCodeErro(405);
+        }
+        
     }
 
     public static String getNomeUsr() {

@@ -1,5 +1,4 @@
 package com.nicolas.Operacoes.Login;
-import com.nicolas.Entities.Usuario;
 import com.nicolas.Exceptions.CampoVazioException;
 import com.nicolas.Exceptions.EmailException;
 import com.nicolas.HttpReq.CaptureMessageAndCode;
@@ -8,10 +7,6 @@ import com.nicolas.Verificacoes.Email;
 import com.nicolas.Verificacoes.VerificaCampo;
 
 public final class Login extends UsuarioLogin{
-    
-    public void UserLogado(){
-        Usuario.setLogado(true);
-    }
 
     public boolean VerificaCamposLogin(){
         try{
