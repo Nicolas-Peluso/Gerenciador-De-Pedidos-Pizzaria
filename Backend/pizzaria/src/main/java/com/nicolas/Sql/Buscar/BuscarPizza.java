@@ -38,12 +38,14 @@ public class BuscarPizza extends DbConect{
         return -1;
     }
 
-    public Pizza BuscarTodaPizza(ArrayList<Item> iArrayList) {
+    public Pizza BuscarTodaPizza(ArrayList<Item> iArrayList, int page) {
         Connection cn = null;
+        System.out.println(page);
         try {
             cn = StartConection();
-            PreparedStatement stm = cn.prepareStatement("SELECT * FROM pizza WHERE IdUsuario = ?");
+            PreparedStatement stm = cn.prepareStatement("SELECT * FROM pizza WHERE IdUsuario = ? LIMIT 2 OFFSET ?");
             stm.setInt(1, Usuario.getUsrId());
+            stm.setInt(2, page);
             ResultSet rs = stm.executeQuery();
 
             while(rs.next()) {
@@ -98,5 +100,5 @@ public class BuscarPizza extends DbConect{
         }
         return -1;
     }
-
+    
 }

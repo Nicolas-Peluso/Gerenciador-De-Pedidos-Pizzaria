@@ -39,12 +39,13 @@ public class BuscarAcompanhamento extends DbConect{
         return -1;
     }
 
-    public Acompanhamento BuscarTodoAcompanhamento(ArrayList<Item> itemArrayList) {
+    public Acompanhamento BuscarTodoAcompanhamento(ArrayList<Item> itemArrayList, int page) {
         Connection cn = null;
         try {
             cn = StartConection();
-            PreparedStatement stm = cn.prepareStatement("SELECT * FROM Acompanhamento WHERE IdUsuario = ?");
+            PreparedStatement stm = cn.prepareStatement("SELECT * FROM Acompanhamento WHERE IdUsuario = ? LIMIT 2 OFFSET ?");
             stm.setInt(1, Usuario.getUsrId());
+            stm.setInt(2, page);
             ResultSet rs = stm.executeQuery();
             
             while (rs.next()) {
@@ -99,5 +100,5 @@ public class BuscarAcompanhamento extends DbConect{
         }
         return -1;
     }
-    
+
 }

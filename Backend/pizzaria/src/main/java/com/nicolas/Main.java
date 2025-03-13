@@ -9,7 +9,7 @@ public class Main {
         try{
             s.StartServer();
         }catch(IOException e){
-            
+            System.out.println("Algo deu errado no server ");
         }
     }
 }

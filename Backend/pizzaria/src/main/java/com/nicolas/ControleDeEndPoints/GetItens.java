@@ -2,6 +2,8 @@ package com.nicolas.ControleDeEndPoints;
 
 import java.io.IOException;
 import java.io.OutputStream;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import com.nicolas.Entities.Usuario;
 import com.nicolas.HttpReq.CaptureMessageAndCode;
@@ -26,10 +28,13 @@ public class GetItens extends Handle{
                 throw new IOException();
             }
 
-            String filtro = exchange.getRequestURI().toString().substring(7);
-
             BuscarItensDoUsuario buscarItensDoUsuario = new BuscarItensDoUsuario();
-            buscarItensDoUsuario.BuscarItens(filtro, token);
+
+            if(!buscarItensDoUsuario.getFiltroELimiteDaUrl(exchange.getRequestURI().toString())){
+                throw new IOException();
+            }
+
+            buscarItensDoUsuario.BuscarItens(token);
 
             exchange.sendResponseHeaders(200, ReturnListPedidos.returnitensCadastradosLista().getBytes().length);
             OutputStream os = exchange.getResponseBody();
@@ -42,3 +47,4 @@ public class GetItens extends Handle{
         }        
     }
 } 
+    
