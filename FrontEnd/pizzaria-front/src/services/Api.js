@@ -31,10 +31,19 @@ export async function Cadastrar(obj) {
     return true;
 }
 
-export async function BuscarItens(fitro) {
+export async function BuscarItens(fitro, page) {
+
+    let token = localStorage.getItem("token");
+    if (token === undefined || token === null) {
+        throw new Error();
+    }
+    
     try {
-        const response = await fetch(url + "itens/"+fitro,{
+        const response = await fetch(url + "itens/" + "filtro=" + fitro +"/limite="+ page,{
             method: 'GET',
+            headers: {
+                'Authorization': 'Bearer '+token
+            }
         });
 
         const result = await response.json();
@@ -45,11 +54,17 @@ export async function BuscarItens(fitro) {
 }
 
 export async function CadastrarItem(obj) {
+    let token = localStorage.getItem("token");
+    if (token === undefined || token === null) {
+        throw new Error();
+    }
+
     try {
         const response = await fetch(url + "CadastrarItem", {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
+                'Authorization': 'Bearer '+token
             },
             body: JSON.stringify(obj)
         });
@@ -62,11 +77,17 @@ export async function CadastrarItem(obj) {
 }
 
 export async function DeletarItem(obj){
+    let token = localStorage.getItem("token");
+    if (token === undefined || token === null) {
+        throw new Error();
+    }
+
     try {
         const request = await fetch(url + "DeletarItem", {
             method: "DELETE",
             headers: {
-                "Content-Type": "application/json"
+                "Content-Type": "application/json",
+                'Authorization': 'Bearer '+token
             },
             body: JSON.stringify(obj)
         });

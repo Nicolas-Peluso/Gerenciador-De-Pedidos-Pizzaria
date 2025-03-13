@@ -40,11 +40,13 @@ export default function Login(){
                             }else
                                 try{
                                     let req = await MidLogin(obj);
+                                    let res = await req.json();
                                     if(!req.ok){
-                                        req = await req.json();
-                                        setMessage(req.Message);
+                                        setMessage(res.Message);
                                         throw new Error();
                                     }
+                                    localStorage.removeItem("token");
+                                    localStorage.setItem("token", res.token);
                                     navigateTo("/dashboard");  
                                 } catch(e){
                                     

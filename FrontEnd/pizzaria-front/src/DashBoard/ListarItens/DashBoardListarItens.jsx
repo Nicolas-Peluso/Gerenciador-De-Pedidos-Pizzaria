@@ -4,11 +4,16 @@ import { BuscarItens } from '../../services/Api';
 import style from './DashBoardListarItens.module.css'
 import { DeletarItem } from '../../services/Api';
 import { Global } from '../../Context/GlobalContext';
+import Confirmar from '../../Util/ConfirmarAcao/Confirmar';
 
 function DashBoardListarItens() {
-    const [filtro, setFiltro] = useState("");
-    const [data, setData] = useState([]);
-    const {setMessage} = useContext(Global);
+    const [filtro, setFiltro] = useState("all");
+    const [data, setData] = useState(null);
+    const {setMessage, confirmar, setConfirmar} = useContext(Global);
+    const [del, setDel] = useState(false);
+    const [nome, setNome] = useState();
+    const [sabor, setSabor] = useState();
+    const [limite, setlimite] = useState(1);
 
     useEffect(() => {
             setMessage("");
@@ -16,20 +21,23 @@ function DashBoardListarItens() {
 
     useEffect(() => {
             AttData();
-    }, [filtro])
+    }, [filtro, limite])
     
     function setCheckBoxUm(valor) {
         setFiltro(valor === filtro ? null : valor);
     }
 
     async function AttData() {
-        let da = await BuscarItens(filtro);
-        setData(da.itens);
+        let dataReq = await BuscarItens(filtro, limite);
+        if (dataReq !== undefined){
+            setData(dataReq);
+        }
     }
 
     async function handleClick(nome, att){
+        setDel(false);
         let tipo = "";
-
+        
         if(att !== undefined){
             tipo = "pizza"
         } else{
@@ -41,6 +49,13 @@ function DashBoardListarItens() {
         await DeletarItem(obj);
         AttData();
     }
+
+    useEffect(() => {
+        if(del && confirmar){
+            handleClick(nome, sabor);
+            setConfirmar(false);
+        }
+    }, [confirmar, del])
 
     return (
         <section className={style.containerTable}>
@@ -60,17 +75,19 @@ function DashBoardListarItens() {
 
             <table>
                 <thead>
-                    <tr>
+                 {data !== null && data.itens.length > 0 ? <tr>
                         <th>Nome</th>
                         <th>Tipo</th>
                         <th>Preco</th>
-                        {filtro !== "acompanhamento" ? <th>Sabor</th> : null}
-                    </tr>
+                        <th>obs</th>
+                        {filtro !== "acompanhamento" ? <th>Sabor</th> : null}    
+                        </tr> : null }
+                
                 </thead>
 
                 <tbody>
                     {
-                        (data || []).map((iten) => (
+                        (data != null && data.itens.length > 0 ? data.itens : []).map((iten) => (
                             <tr key={iten.id}>
                                 <td>
                                     {iten.nome}
@@ -82,20 +99,48 @@ function DashBoardListarItens() {
                                     {"R$" + iten.preco}
                                 </td>
                                 <td>
+                                    {iten.obs}
+                                </td>
+                                <td>
                                     {iten.sabor !== null ? iten.sabor : ""}
                                 </td>
                                 <td>
                                     <button>editar</button>
                                 </td>
                                 <td>
-                                    <button onClick={() => handleClick(iten.nome, iten.sabor)}>excluir</button>
+                                    <button onClick={() => {
+                                        setDel(true);
+                                        setNome(iten.nome);
+                                        setSabor(iten.sabor);
+                                    }}>excluir</button>
                                 </td>
                             </tr>
-                        ))
+                        ))                        
                     }
+                    {data != null && data.itens.length === 0 ? <h1>Nenhum produto encontrado</h1> : null}
                 </tbody>
             </table>
-        </section>
+               {del ? <Confirmar fun={setDel} /> : null}
+               
+               <section className={style.ContainerPag}>
+                    <span className={style.anterior}>
+                        <button onClick={e => {
+                            e.preventDefault();
+                            if(limite > 1){
+                                setlimite(limite - 1);
+                            }
+                        }}>{"<"}</button>
+                    </span>
+                    <span className={style.proximo}>
+                        <button onClick={ e => {
+                            e.preventDefault();
+                            if(data !== null && data.itens.length !== 0){
+                                setlimite(limite + 1);
+                            }
+                         }}>{">"}</button>
+                    </span>
+               </section>
+        </section> 
     );
 }
 
