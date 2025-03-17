@@ -6,6 +6,7 @@ import { BrowserRouter, Route, Routes } from 'react-router';
 import DashBoard from './DashBoard/DashBoard';
 import DashBoardAdd from './DashBoard/AdicionarItem/DashBoardAdd';
 import DashBoardListarItens from './DashBoard/ListarItens/DashBoardListarItens';
+import Pedido from './Pedido/Pedido';
 
 function App() {
 
@@ -20,6 +21,7 @@ function App() {
                       <Route path='add' element={<DashBoardAdd />} />
                       <Route path='list' element={<DashBoardListarItens />} />
                   </Route>
+                  <Route path='pedido/cadastro' element={<Pedido />}/>
               </Routes>
         </GlobalConte>
       </BrowserRouter>

@@ -14,9 +14,6 @@ function DashBoard() {
         }
     }, [isLogin, navigate])
 
-    useEffect(() => {
-        navigate("/dashboard/list");
-    }, [])
 
     useEffect(() => {
         setMessage("");
@@ -35,7 +32,7 @@ function DashBoard() {
                                 <Link to="/dashboard/add"><button>Adicionar Produtos</button></Link>
                             </li>
                             <li>
-                                <button>Cadastrar Pedido</button>
+                                <Link to="/pedido/cadastro"><button>Cadastrar Pedido</button></Link>
                             </li>
                             <li>
                                 <button>Gerenciar Perfil</button>

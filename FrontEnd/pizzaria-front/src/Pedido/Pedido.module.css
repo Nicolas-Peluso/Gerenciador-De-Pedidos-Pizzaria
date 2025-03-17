@@ -1,0 +1,15 @@
+fieldset{
+    display: flex;
+    flex-direction: column;
+    margin-top: 10px;
+    padding: 25px;
+    border-radius: 10px;
+    border-width: 1px;
+    border-color: rgb(0, 0, 0);
+    border: none;
+}
+
+p{
+    font-weight: lighter;
+    font-size: large;
+}

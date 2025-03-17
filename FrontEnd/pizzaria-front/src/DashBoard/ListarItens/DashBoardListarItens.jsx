@@ -131,6 +131,7 @@ function DashBoardListarItens() {
                             }
                         }}>{"<"}</button>
                     </span>
+
                     <span className={style.proximo}>
                         <button onClick={ e => {
                             e.preventDefault();
